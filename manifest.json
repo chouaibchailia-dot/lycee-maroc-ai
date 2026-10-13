@@ -1,0 +1,13 @@
+{
+  "name": "Lycée Maroc AI",
+  "short_name": "Lycée Maroc",
+  "description": "منصة الأستاذ المغربي الذكي",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1B5E20",
+  "theme_color": "#1B5E20",
+  "dir": "rtl",
+  "lang": "ar",
+  "icons": []
+}
