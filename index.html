@@ -11,17 +11,15 @@
 </head>
 <body>
 
-  <!-- Splash Screen -->
+  <!-- ═══ Splash ═══ -->
   <div id="splash" class="splash">
-    <div class="logo-circle">
-      <span class="logo-icon">🌿</span>
-    </div>
+    <div class="logo-circle"><span class="logo-icon">🌿</span></div>
     <h1 class="splash-title">Lycée Maroc AI</h1>
     <p class="splash-subtitle">الأستاذ المغربي الذكي</p>
     <div class="splash-line"></div>
   </div>
 
-  <!-- Language Selection -->
+  <!-- ═══ Language ═══ -->
   <div id="langScreen" class="screen hidden">
     <h1>اختر اللغة</h1>
     <button class="lang-btn" data-lang="ar">🇲🇦 العربية</button>
@@ -29,38 +27,75 @@
     <button class="lang-btn" data-lang="en">🇬🇧 English</button>
   </div>
 
-  <!-- Welcome -->
+  <!-- ═══ Welcome ═══ -->
   <div id="welcomeScreen" class="screen hidden">
-    <div class="logo-circle">
-      <span class="logo-icon">🌿</span>
-    </div>
+    <div class="logo-circle"><span class="logo-icon">🌿</span></div>
     <h1>Lycée Maroc AI</h1>
     <p>الأستاذ المغربي الذكي</p>
     <button id="goLogin" class="btn-primary">تسجيل الدخول</button>
     <button id="goSignup" class="btn-outline">إنشاء حساب جديد</button>
   </div>
 
-  <!-- Auth Screen -->
+  <!-- ═══ Auth ═══ -->
   <div id="authScreen" class="screen hidden">
-    <button id="backBtn" class="back-btn">رجوع</button>
+    <button id="backBtn" class="back-btn">← رجوع</button>
     <h2 id="authTitle">إنشاء حساب جديد</h2>
 
-    <!-- Signup Form -->
     <form id="signupForm" class="auth-form">
+      <label class="label">اختر الدور</label>
       <div class="roles">
-        <button type="button" class="role-btn" data-role="teacher">أستاذ</button>
-        <button type="button" class="role-btn" data-role="student">تلميذ</button>
-        <button type="button" class="role-btn" data-role="parent">ولي أمر</button>
-        <button type="button" class="role-btn" data-role="guard">حارس</button>
-        <button type="button" class="role-btn" data-role="director">مدير</button>
+        <button type="button" class="role-btn" data-role="teacher">👨‍🏫 أستاذ</button>
+        <button type="button" class="role-btn" data-role="student">🎓 تلميذ</button>
+        <button type="button" class="role-btn" data-role="parent">👨‍👦 ولي أمر</button>
+        <button type="button" class="role-btn" data-role="guard">🛡️ حارس</button>
+        <button type="button" class="role-btn" data-role="director">🏛️ مدير</button>
       </div>
+
       <input type="text" id="suName" placeholder="الاسم الكامل" required>
       <input type="email" id="suEmail" placeholder="البريد الإلكتروني" required>
-      <input type="password" id="suPassword" placeholder="كلمة المرور" required minlength="8">
+      <input type="tel" id="suPhone" placeholder="رقم الهاتف (اختياري)">
+      <input type="password" id="suPassword" placeholder="كلمة المرور (8 أحرف على الأقل)" required minlength="8">
+
+      <div id="teacherFields" class="hidden">
+        <label class="label">📚 المادة</label>
+        <select id="suSubject" class="select">
+          <option value="">اختر المادة...</option>
+          <option>اللغة العربية</option>
+          <option>اللغة الفرنسية</option>
+          <option>اللغة الإنجليزية</option>
+          <option>الرياضيات</option>
+          <option>الفيزياء والكيمياء</option>
+          <option>علوم الحياة والأرض</option>
+          <option>التاريخ والجغرافيا</option>
+          <option>التربية الإسلامية</option>
+          <option>الفلسفة</option>
+          <option>الاقتصاد</option>
+          <option>المحاسبة</option>
+          <option>القانون</option>
+          <option>المعلوميات</option>
+          <option>الهندسة الكهربائية</option>
+          <option>الهندسة الميكانيكية</option>
+          <option>التربية البدنية</option>
+        </select>
+
+        <label class="label">🎓 المستوى</label>
+        <select id="suLevel" class="select">
+          <option value="">اختر المستوى...</option>
+          <option>السابعة</option>
+          <option>الثامنة</option>
+          <option>التاسعة</option>
+          <option>الجذع المشترك</option>
+          <option>الأولى باك</option>
+          <option>الثانية باك</option>
+        </select>
+
+        <label class="label">🏫 المؤسسة</label>
+        <input type="text" id="suSchool" placeholder="اسم الثانوية / الإعدادية">
+      </div>
+
       <button type="submit" class="btn-primary" id="signupBtn" disabled>إنشاء حسابي</button>
     </form>
 
-    <!-- Login Form -->
     <form id="loginForm" class="auth-form hidden">
       <input type="email" id="loginEmail" placeholder="البريد الإلكتروني" required>
       <input type="password" id="loginPassword" placeholder="كلمة المرور" required>
@@ -71,11 +106,37 @@
     <p id="successMsg" class="success hidden"></p>
   </div>
 
-  <!-- Dashboard -->
+  <!-- ═══ Code Reveal (بعد التسجيل) ═══ -->
+  <div id="codeRevealScreen" class="screen hidden">
+    <div class="logo-circle"><span class="logo-icon">🎟️</span></div>
+    <h2>مرحباً بك!</h2>
+    <p>هادا هو كود المشاركة ديالك:</p>
+
+    <div class="code-box">
+      <div class="code-text" id="revealCode">------</div>
+      <p class="code-hint">عطي هاد الكود للتلاميذ باش ينضمو ليك</p>
+    </div>
+
+    <button id="copyRevealBtn" class="btn-primary">📋 نسخ الكود</button>
+    <button id="continueBtn" class="btn-outline">✅ متابعة للوحة التحكم</button>
+  </div>
+
+  <!-- ═══ Dashboard ═══ -->
   <div id="dashboardScreen" class="screen hidden">
-    <h1>مرحباً بك</h1>
-    <p id="userInfo"></p>
-    <button id="logoutBtn" class="btn-outline">خروج</button>
+    <div class="dash-header">
+      <div>
+        <h1 id="dashGreeting">مرحباً</h1>
+        <p id="dashRole" class="role-badge"></p>
+      </div>
+      <div class="header-actions">
+        <button id="settingsBtn" class="btn-icon">⚙️</button>
+        <button id="logoutBtn" class="btn-icon">🚪</button>
+      </div>
+    </div>
+    <div id="dashContent"></div>
+
+    <!-- 🔽 مخفي — للتوافق مع app.js القديم 🔽 -->
+    <p id="userInfo" class="hidden"></p>
   </div>
 
   <script type="module" src="app.js"></script>
