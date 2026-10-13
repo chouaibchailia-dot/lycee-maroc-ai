@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#B71C1C">
+  <title>Lycée Maroc AI</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Splash Screen -->
+  <div id="splash" class="splash">
+    <div class="logo-circle">
+      <span class="logo-icon">🌿</span>
+    </div>
+    <h1 class="splash-title">Lycée Maroc AI</h1>
+    <p class="splash-subtitle">الأستاذ المغربي الذكي</p>
+    <div class="splash-line"></div>
+  </div>
+
+  <!-- Language Selection -->
+  <div id="langScreen" class="screen hidden">
+    <h1>اختر اللغة</h1>
+    <button class="lang-btn" data-lang="ar">🇲🇦 العربية</button>
+    <button class="lang-btn" data-lang="fr">🇫🇷 Français</button>
+    <button class="lang-btn" data-lang="en">🇬🇧 English</button>
+  </div>
+
+  <!-- Welcome -->
+  <div id="welcomeScreen" class="screen hidden">
+    <div class="logo-circle">
+      <span class="logo-icon">🌿</span>
+    </div>
+    <h1>Lycée Maroc AI</h1>
+    <p>الأستاذ المغربي الذكي</p>
+    <button id="goLogin" class="btn-primary">تسجيل الدخول</button>
+    <button id="goSignup" class="btn-outline">إنشاء حساب جديد</button>
+  </div>
+
+  <!-- Auth Screen -->
+  <div id="authScreen" class="screen hidden">
+    <button id="backBtn" class="back-btn">رجوع</button>
+    <h2 id="authTitle">إنشاء حساب جديد</h2>
+
+    <!-- Signup Form -->
+    <form id="signupForm" class="auth-form">
+      <div class="roles">
+        <button type="button" class="role-btn" data-role="teacher">أستاذ</button>
+        <button type="button" class="role-btn" data-role="student">تلميذ</button>
+        <button type="button" class="role-btn" data-role="parent">ولي أمر</button>
+        <button type="button" class="role-btn" data-role="guard">حارس</button>
+        <button type="button" class="role-btn" data-role="director">مدير</button>
+      </div>
+      <input type="text" id="suName" placeholder="الاسم الكامل" required>
+      <input type="email" id="suEmail" placeholder="البريد الإلكتروني" required>
+      <input type="password" id="suPassword" placeholder="كلمة المرور" required minlength="8">
+      <button type="submit" class="btn-primary" id="signupBtn" disabled>إنشاء حسابي</button>
+    </form>
+
+    <!-- Login Form -->
+    <form id="loginForm" class="auth-form hidden">
+      <input type="email" id="loginEmail" placeholder="البريد الإلكتروني" required>
+      <input type="password" id="loginPassword" placeholder="كلمة المرور" required>
+      <button type="submit" class="btn-primary">دخول</button>
+    </form>
+
+    <p id="errorMsg" class="error hidden"></p>
+    <p id="successMsg" class="success hidden"></p>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboardScreen" class="screen hidden">
+    <h1>مرحباً بك</h1>
+    <p id="userInfo"></p>
+    <button id="logoutBtn" class="btn-outline">خروج</button>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
