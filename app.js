@@ -1,10 +1,9 @@
 // ═══════════════════════════════════════════════════
-// LYCÉE MAROC AI — APP.JS (النسخة النهائية)
+// LYCÉE MAROC AI — APP.JS (الجزء الأول)
 // ═══════════════════════════════════════════════════
 
 import { supabase } from './supabase.js';
 
-// ═══════════ Helpers ═══════════
 const $ = (id) => document.getElementById(id);
 const show = (el) => el.classList.remove('hidden');
 const hide = (el) => el.classList.add('hidden');
@@ -13,7 +12,6 @@ let selectedRole = null;
 let currentUser = null;
 let currentProfile = null;
 
-// ═══════════ توليد الكودات ═══════════
 function genCode(len = 6) {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let s = '';
@@ -33,7 +31,6 @@ function roleLabel(role) {
   return m[role] || role;
 }
 
-// ═══════════ Toast ═══════════
 function toast(msg, type = 'info') {
   const t = document.createElement('div');
   t.className = 'toast ' + type;
@@ -42,7 +39,6 @@ function toast(msg, type = 'info') {
   setTimeout(() => t.remove(), 2500);
 }
 
-// ═══════════ Copy ═══════════
 async function copyText(txt) {
   try {
     await navigator.clipboard.writeText(txt);
@@ -52,19 +48,16 @@ async function copyText(txt) {
   }
 }
 
-// ═══════════ Show Error ═══════════
 function showError(msg) {
   $('errorMsg').textContent = msg;
   show($('errorMsg'));
 }
 
-// ═══════════ Splash → Language ═══════════
 setTimeout(() => {
   hide($('splash'));
   show($('langScreen'));
 }, 1500);
 
-// ═══════════ Language Selection ═══════════
 document.querySelectorAll('.lang-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     hide($('langScreen'));
@@ -72,7 +65,6 @@ document.querySelectorAll('.lang-btn').forEach(btn => {
   });
 });
 
-// ═══════════ Welcome → Login/Signup ═══════════
 $('goLogin').addEventListener('click', () => {
   hide($('welcomeScreen'));
   show($('authScreen'));
@@ -89,7 +81,6 @@ $('goSignup').addEventListener('click', () => {
   $('authTitle').textContent = 'إنشاء حساب جديد';
 });
 
-// ═══════════ Back Button ═══════════
 $('backBtn').addEventListener('click', () => {
   hide($('authScreen'));
   show($('welcomeScreen'));
@@ -97,7 +88,6 @@ $('backBtn').addEventListener('click', () => {
   hide($('successMsg'));
 });
 
-// ═══════════ Role Selection ═══════════
 document.querySelectorAll('.role-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('selected'));
@@ -113,7 +103,6 @@ document.querySelectorAll('.role-btn').forEach(btn => {
   });
 });
 
-// ═══════════ Signup ═══════════
 $('signupForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   hide($('errorMsg'));
@@ -187,7 +176,6 @@ $('signupForm').addEventListener('submit', async (e) => {
   }
 });
 
-// ═══════════ Code Reveal ═══════════
 $('copyRevealBtn').addEventListener('click', () => {
   copyText($('revealCode').textContent);
 });
@@ -197,7 +185,6 @@ $('continueBtn').addEventListener('click', async () => {
   if (user) await loadUserAndDashboard(user.id);
 });
 
-// ═══════════ Login ═══════════
 $('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   hide($('errorMsg'));
@@ -216,18 +203,15 @@ $('loginForm').addEventListener('submit', async (e) => {
   }
 });
 
-// ═══════════ Logout ═══════════
 $('logoutBtn').addEventListener('click', async () => {
   await supabase.auth.signOut();
   location.reload();
 });
 
-// ═══════════ Settings ═══════════
 $('settingsBtn').addEventListener('click', () => {
   toast('⚙️ الإعدادات قريباً...', 'info');
 });
 
-// ═══════════ Load User + Dashboard ═══════════
 async function loadUserAndDashboard(userId) {
   try {
     const { data: profile, error } = await supabase
@@ -260,7 +244,6 @@ async function loadUserAndDashboard(userId) {
   }
 }
 
-// ═══════════ Render Dashboard ═══════════
 async function renderDashboard(role) {
   const c = $('dashContent');
   c.innerHTML = '<div class="empty"><span class="loader"></span></div>';
@@ -275,7 +258,6 @@ async function renderDashboard(role) {
   }
 }
 
-// ═══════════ Teacher Dashboard ═══════════
 async function renderTeacherDash(c) {
   const shareCode = currentProfile.share_code || '------';
 
@@ -480,4 +462,55 @@ async function renderStudentDash(c) {
 
     } catch (err) {
       console.error('Find error:', err);
-      $('teacher
+      $('teacherResult').innerHTML = '<div class="empty">خطأ: ' + err.message + '</div>';
+    }
+
+    $('joinBtn').disabled = false;
+    $('joinBtn').textContent = '🔍 بحث';
+  });
+}
+
+// ═══════════ Send Join Request ═══════════
+async function sendJoinRequest(teacherId, code) {
+  try {
+    const { data: existing } = await supabase
+      .from('join_requests')
+      .select('id, status')
+      .eq('from_user', currentUser.id)
+      .eq('to_teacher', teacherId)
+      .maybeSingle();
+
+    if (existing) {
+      if (existing.status === 'pending') {
+        toast('عندك طلب معلق مع هاد الأستاذ', 'info');
+        return;
+      }
+      if (existing.status === 'accepted') {
+        toast('راك مقبول من هاد الأستاذ', 'success');
+        return;
+      }
+    }
+
+    const { error } = await supabase.from('join_requests').insert({
+      from_user: currentUser.id,
+      to_teacher: teacherId,
+      type: 'student',
+      status: 'pending',
+      message: `طلب انضمام بكود ${code}`
+    });
+    if (error) throw error;
+
+    toast('✅ تم إرسال الطلب للأستاذ', 'success');
+
+  } catch (err) {
+    console.error('Send request error:', err);
+    toast('خطأ: ' + err.message, 'error');
+  }
+}
+
+// ═══════════ Session Check ═══════════
+supabase.auth.getSession().then(({ data: { session } }) => {
+  if (session && session.user) {
+    loadUserAndDashboard(session.user.id);
+  }
+});
