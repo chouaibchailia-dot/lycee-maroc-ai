@@ -53,9 +53,10 @@
 
       <input type="text" id="suName" placeholder="الاسم الكامل" required>
       <input type="email" id="suEmail" placeholder="البريد الإلكتروني" required>
-      <input type="tel" id="suPhone" placeholder="رقم الهاتف (اختياري)">
+      <input type="tel" id="suPhone" placeholder="رقم الهاتف">
       <input type="password" id="suPassword" placeholder="كلمة المرور (8 أحرف على الأقل)" required minlength="8">
 
+      <!-- ═══ حقول الأستاذ ═══ -->
       <div id="teacherFields" class="hidden">
         <label class="label">📚 المادة</label>
         <select id="suSubject" class="select">
@@ -93,6 +94,26 @@
         <input type="text" id="suSchool" placeholder="اسم الثانوية / الإعدادية">
       </div>
 
+      <!-- ═══ حقول التلميذ ═══ -->
+      <div id="studentFields" class="hidden">
+        <label class="label">📱 رقم هاتف الوالد</label>
+        <input type="tel" id="suParentPhone" placeholder="06XXXXXXXX">
+
+        <label class="label">🎓 المستوى</label>
+        <select id="suStudentLevel" class="select">
+          <option value="">اختر المستوى...</option>
+          <option>السابعة</option>
+          <option>الثامنة</option>
+          <option>التاسعة</option>
+          <option>الجذع المشترك</option>
+          <option>الأولى باك</option>
+          <option>الثانية باك</option>
+        </select>
+
+        <label class="label">🏫 المؤسسة</label>
+        <input type="text" id="suStudentInstitution" placeholder="اسم الثانوية / الإعدادية">
+      </div>
+
       <button type="submit" class="btn-primary" id="signupBtn" disabled>إنشاء حسابي</button>
     </form>
 
@@ -106,7 +127,7 @@
     <p id="successMsg" class="success hidden"></p>
   </div>
 
-  <!-- ═══ Code Reveal (بعد التسجيل) ═══ -->
+  <!-- ═══ Code Reveal ═══ -->
   <div id="codeRevealScreen" class="screen hidden">
     <div class="logo-circle"><span class="logo-icon">🎟️</span></div>
     <h2>مرحباً بك!</h2>
