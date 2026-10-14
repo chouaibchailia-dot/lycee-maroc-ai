@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════
-// LYCÉE MAROC AI — APP.JS (الجزء الأول)
+// LYCÉE MAROC AI — APP.JS (النسخة الكاملة النهائية)
 // ═══════════════════════════════════════════════════
 
 import { supabase } from './supabase.js';
@@ -88,6 +88,7 @@ $('backBtn').addEventListener('click', () => {
   hide($('successMsg'));
 });
 
+// ═══════════ Role Selection ═══════════
 document.querySelectorAll('.role-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('selected'));
@@ -95,14 +96,20 @@ document.querySelectorAll('.role-btn').forEach(btn => {
     selectedRole = btn.dataset.role;
     $('signupBtn').disabled = false;
 
+    // إخفاء الكل أولاً
+    hide($('teacherFields'));
+    if ($('studentFields')) hide($('studentFields'));
+
+    // إظهار حسب الدور
     if (selectedRole === 'teacher') {
       show($('teacherFields'));
-    } else {
-      hide($('teacherFields'));
+    } else if (selectedRole === 'student') {
+      if ($('studentFields')) show($('studentFields'));
     }
   });
 });
 
+// ═══════════ Signup ═══════════
 $('signupForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   hide($('errorMsg'));
@@ -116,13 +123,26 @@ $('signupForm').addEventListener('submit', async (e) => {
   if (!selectedRole) { showError('المرجو اختيار الدور'); return; }
   if (password.length < 8) { showError('كلمة المرور خاصها 8 أحرف على الأقل'); return; }
 
-  let subject = null, level = null, institution = null;
+  let subject = null, level = null, institution = null, parentPhone = null;
+
+  // ═══ حقول الأستاذ ═══
   if (selectedRole === 'teacher') {
     subject = $('suSubject') ? $('suSubject').value : null;
     level = $('suLevel') ? $('suLevel').value : null;
     institution = $('suSchool') ? $('suSchool').value.trim() : null;
     if (!subject) { showError('المرجو اختيار المادة'); return; }
     if (!level) { showError('المرجو اختيار المستوى'); return; }
+    if (!institution) { showError('المرجو إدخال اسم المؤسسة'); return; }
+  }
+
+  // ═══ حقول التلميذ ═══
+  if (selectedRole === 'student') {
+    parentPhone = $('suParentPhone') ? $('suParentPhone').value.trim() : null;
+    level = $('suStudentLevel') ? $('suStudentLevel').value : null;
+    institution = $('suStudentInstitution') ? $('suStudentInstitution').value.trim() : null;
+    if (!parentPhone) { showError('المرجو إدخال رقم هاتف الوالد'); return; }
+    if (!level) { showError('المرجو اختيار المستوى'); return; }
+    if (!institution) { showError('المرجو إدخال اسم المؤسسة'); return; }
   }
 
   $('signupBtn').disabled = true;
@@ -137,6 +157,7 @@ $('signupForm').addEventListener('submit', async (e) => {
     if (authErr) throw authErr;
     if (!authData.user) throw new Error('لم يتم إنشاء الحساب');
 
+    // توليد share_code للأستاذ
     let shareCode = null;
     if (selectedRole === 'teacher') {
       shareCode = genCode(6);
@@ -151,6 +172,7 @@ $('signupForm').addEventListener('submit', async (e) => {
       subject: subject,
       level: level,
       institution: institution,
+      parent_phone: parentPhone,
       share_code: shareCode
     });
     if (profErr) throw profErr;
@@ -176,6 +198,7 @@ $('signupForm').addEventListener('submit', async (e) => {
   }
 });
 
+// ═══════════ Code Reveal ═══════════
 $('copyRevealBtn').addEventListener('click', () => {
   copyText($('revealCode').textContent);
 });
@@ -185,6 +208,7 @@ $('continueBtn').addEventListener('click', async () => {
   if (user) await loadUserAndDashboard(user.id);
 });
 
+// ═══════════ Login ═══════════
 $('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   hide($('errorMsg'));
@@ -203,15 +227,18 @@ $('loginForm').addEventListener('submit', async (e) => {
   }
 });
 
+// ═══════════ Logout ═══════════
 $('logoutBtn').addEventListener('click', async () => {
   await supabase.auth.signOut();
   location.reload();
 });
 
+// ═══════════ Settings ═══════════
 $('settingsBtn').addEventListener('click', () => {
   toast('⚙️ الإعدادات قريباً...', 'info');
 });
 
+// ═══════════ Load User + Dashboard ═══════════
 async function loadUserAndDashboard(userId) {
   try {
     const { data: profile, error } = await supabase
@@ -244,6 +271,7 @@ async function loadUserAndDashboard(userId) {
   }
 }
 
+// ═══════════ Render Dashboard ═══════════
 async function renderDashboard(role) {
   const c = $('dashContent');
   c.innerHTML = '<div class="empty"><span class="loader"></span></div>';
@@ -258,6 +286,7 @@ async function renderDashboard(role) {
   }
 }
 
+// ═══════════ Teacher Dashboard ═══════════
 async function renderTeacherDash(c) {
   const shareCode = currentProfile.share_code || '------';
 
@@ -338,7 +367,11 @@ function renderRequests(requests) {
     <div class="request-item">
       <div class="request-info">
         <div class="request-name">👤 ${r.out_student_name || 'بدون اسم'}</div>
-        <div class="request-email">${r.out_student_email || ''}</div>
+        <div class="request-email">📧 ${r.out_student_email || ''}</div>
+        ${r.out_student_phone ? `<div class="request-email">📱 ${r.out_student_phone}</div>` : ''}
+        ${r.out_parent_phone ? `<div class="request-email">👨‍👦 هاتف الوالد: ${r.out_parent_phone}</div>` : ''}
+        ${r.out_student_level ? `<div class="request-email">🎓 ${r.out_student_level}</div>` : ''}
+        ${r.out_student_institution ? `<div class="request-email">🏫 ${r.out_student_institution}</div>` : ''}
       </div>
       <div class="request-actions">
         <button class="btn-accept" data-accept="${r.out_request_id}">✅ قبول</button>
