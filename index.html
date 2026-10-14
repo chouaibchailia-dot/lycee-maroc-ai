@@ -41,7 +41,7 @@
     <button id="backBtn" class="back-btn">← رجوع</button>
     <h2 id="authTitle">إنشاء حساب جديد</h2>
 
-    <form id="signupForm" class="auth-form">
+    <form id="signupForm" class="auth-form" novalidate>
       <label class="label">اختر الدور</label>
       <div class="roles">
         <button type="button" class="role-btn" data-role="teacher">👨‍🏫 أستاذ</button>
@@ -51,10 +51,10 @@
         <button type="button" class="role-btn" data-role="director">🏛️ مدير</button>
       </div>
 
-      <input type="text" id="suName" placeholder="الاسم الكامل" required>
-      <input type="email" id="suEmail" placeholder="البريد الإلكتروني" required>
-      <input type="tel" id="suPhone" placeholder="رقم الهاتف">
-      <input type="password" id="suPassword" placeholder="كلمة المرور (8 أحرف على الأقل)" required minlength="8">
+      <input type="text" id="suName" placeholder="الاسم الكامل" required minlength="3" maxlength="60" autocomplete="name">
+      <input type="email" id="suEmail" placeholder="البريد الإلكتروني" required maxlength="100" autocomplete="email">
+      <input type="tel" id="suPhone" placeholder="06XXXXXXXX" maxlength="10" inputmode="numeric" autocomplete="tel">
+      <input type="password" id="suPassword" placeholder="كلمة المرور (8 أحرف على الأقل)" required minlength="8" maxlength="100" autocomplete="new-password">
 
       <!-- ═══ حقول الأستاذ ═══ -->
       <div id="teacherFields" class="hidden">
@@ -91,13 +91,13 @@
         </select>
 
         <label class="label">🏫 المؤسسة</label>
-        <input type="text" id="suSchool" placeholder="اسم الثانوية / الإعدادية">
+        <input type="text" id="suSchool" placeholder="اسم الثانوية / الإعدادية" minlength="3" maxlength="100">
       </div>
 
       <!-- ═══ حقول التلميذ ═══ -->
       <div id="studentFields" class="hidden">
         <label class="label">📱 رقم هاتف الوالد</label>
-        <input type="tel" id="suParentPhone" placeholder="06XXXXXXXX">
+        <input type="tel" id="suParentPhone" placeholder="06XXXXXXXX" maxlength="10" inputmode="numeric">
 
         <label class="label">🎓 المستوى</label>
         <select id="suStudentLevel" class="select">
@@ -111,15 +111,15 @@
         </select>
 
         <label class="label">🏫 المؤسسة</label>
-        <input type="text" id="suStudentInstitution" placeholder="اسم الثانوية / الإعدادية">
+        <input type="text" id="suStudentInstitution" placeholder="اسم الثانوية / الإعدادية" minlength="3" maxlength="100">
       </div>
 
       <button type="submit" class="btn-primary" id="signupBtn" disabled>إنشاء حسابي</button>
     </form>
 
     <form id="loginForm" class="auth-form hidden">
-      <input type="email" id="loginEmail" placeholder="البريد الإلكتروني" required>
-      <input type="password" id="loginPassword" placeholder="كلمة المرور" required>
+      <input type="email" id="loginEmail" placeholder="البريد الإلكتروني" required maxlength="100" autocomplete="email">
+      <input type="password" id="loginPassword" placeholder="كلمة المرور" required maxlength="100" autocomplete="current-password">
       <button type="submit" class="btn-primary">دخول</button>
     </form>
 
