@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════
-// LYCÉE MAROC AI — APP.JS (النسخة الكاملة النهائية)
+// LYCÉE MAROC AI — APP.JS (مع Validation)
 // ═══════════════════════════════════════════════════
 
 import { supabase } from './supabase.js';
@@ -11,6 +11,73 @@ const hide = (el) => el.classList.add('hidden');
 let selectedRole = null;
 let currentUser = null;
 let currentProfile = null;
+
+// ═══════════════════════════════════════════════════
+// 🛡️ Validation Functions
+// ═══════════════════════════════════════════════════
+
+const DISPOSABLE_DOMAINS = [
+  'tempmail.com', 'temp-mail.org', '10minutemail.com',
+  'guerrillamail.com', 'guerrillamail.info', 'grr.la',
+  'mailinator.com', 'maildrop.cc', 'yopmail.com',
+  'throwaway.email', 'sharklasers.com', 'getnada.com',
+  'dispostable.com', 'trashmail.com', 'spam4.me',
+  'mailmetrash.com', 'spam.la', 'tyldd.com', '0-mail.com',
+  '0clickemail.com', '10mail.org', '20minutemail.com',
+  'emailondeck.com', 'fakeinbox.com', 'filzmail.com',
+  'getairmail.com', 'throwam.com', 'trbvm.com',
+  'wegwerfemail.de', 'wegwerfmail.de',
+  'yopmail.fr', 'yopmail.net', 'jetable.fr.nf',
+  'tempmail.net', 'tempinbox.com', 'tempinbox.co.uk',
+  'trash-mail.com', 'trashmail.me', 'trashymail.com',
+  'yopmail.gq', 'yopmail.tk', 'mailsac.com', 'moakt.com',
+  'mailcatch.com', 'mailnesia.com', 'spambox.us',
+  'spamgourmet.com', 'mailnull.com', 'spamex.com',
+  'mytemp.email', 'tempsky.com', 'tempemail.com'
+];
+
+function validateEmail(email) {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(email)) {
+    return { valid: false, msg: 'الإيميل غالط — تأكد من الصيغة (name@domain.com)' };
+  }
+  const domain = email.split('@')[1].toLowerCase();
+  if (DISPOSABLE_DOMAINS.includes(domain)) {
+    return { valid: false, msg: 'هاد الإيميل مؤقت ولا مقبول' };
+  }
+  if (email.includes('..') || email.includes('@@')) {
+    return { valid: false, msg: 'الإيميل فيه رموز غالطة' };
+  }
+  if (email.length < 6 || email.length > 100) {
+    return { valid: false, msg: 'طول الإيميل غالط' };
+  }
+  return { valid: true };
+}
+
+function validatePhone(phone) {
+  if (!phone) return { valid: false, msg: 'المرجو إدخال رقم الهاتف' };
+  const cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
+  const moroccoRegex = /^(?:\+212|0)([5-7])\d{8}$/;
+  if (!moroccoRegex.test(cleanPhone)) {
+    return { valid: false, msg: 'الرقم خاصو يبدا بـ 06 ولا 07 ولا 05 ويكون 10 أرقام' };
+  }
+  return { valid: true, clean: cleanPhone };
+}
+
+function validateName(name) {
+  if (!name || name.length < 3) {
+    return { valid: false, msg: 'الاسم خاصو 3 أحرف على الأقل' };
+  }
+  if (name.length > 60) {
+    return { valid: false, msg: 'الاسم طويل بزاف' };
+  }
+  if (!/^[\u0600-\u06FFa-zA-Z\s'-]+$/.test(name)) {
+    return { valid: false, msg: 'الاسم فيه رموز غير مقبولة' };
+  }
+  return { valid: true };
+}
+
+// ═══════════════════════════════════════════════════
 
 function genCode(len = 6) {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -88,6 +155,45 @@ $('backBtn').addEventListener('click', () => {
   hide($('successMsg'));
 });
 
+// ═══════════ Live Validation ═══════════
+
+$('suEmail')?.addEventListener('blur', () => {
+  const email = $('suEmail').value.trim();
+  if (!email) return;
+  const check = validateEmail(email);
+  $('suEmail').style.borderColor = check.valid ? '#4CAF50' : '#E53935';
+});
+
+$('suPhone')?.addEventListener('blur', () => {
+  const phone = $('suPhone').value.trim();
+  if (!phone) return;
+  const check = validatePhone(phone);
+  $('suPhone').style.borderColor = check.valid ? '#4CAF50' : '#E53935';
+});
+
+$('suParentPhone')?.addEventListener('blur', () => {
+  const phone = $('suParentPhone').value.trim();
+  if (!phone) return;
+  const check = validatePhone(phone);
+  $('suParentPhone').style.borderColor = check.valid ? '#4CAF50' : '#E53935';
+});
+
+$('suName')?.addEventListener('blur', () => {
+  const name = $('suName').value.trim();
+  if (!name) return;
+  const check = validateName(name);
+  $('suName').style.borderColor = check.valid ? '#4CAF50' : '#E53935';
+});
+
+// رموز الهاتف — غير أرقام
+$('suPhone')?.addEventListener('input', (e) => {
+  e.target.value = e.target.value.replace(/[^0-9+]/g, '');
+});
+
+$('suParentPhone')?.addEventListener('input', (e) => {
+  e.target.value = e.target.value.replace(/[^0-9+]/g, '');
+});
+
 // ═══════════ Role Selection ═══════════
 document.querySelectorAll('.role-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -96,11 +202,9 @@ document.querySelectorAll('.role-btn').forEach(btn => {
     selectedRole = btn.dataset.role;
     $('signupBtn').disabled = false;
 
-    // إخفاء الكل أولاً
     hide($('teacherFields'));
     if ($('studentFields')) hide($('studentFields'));
 
-    // إظهار حسب الدور
     if (selectedRole === 'teacher') {
       show($('teacherFields'));
     } else if (selectedRole === 'student') {
@@ -116,11 +220,22 @@ $('signupForm').addEventListener('submit', async (e) => {
   hide($('successMsg'));
 
   const name = $('suName').value.trim();
-  const email = $('suEmail').value.trim();
+  const email = $('suEmail').value.trim().toLowerCase();
   const phone = $('suPhone') ? $('suPhone').value.trim() : '';
   const password = $('suPassword').value;
 
   if (!selectedRole) { showError('المرجو اختيار الدور'); return; }
+
+  // ═══ Validation ═══
+  const nameCheck = validateName(name);
+  if (!nameCheck.valid) { showError(nameCheck.msg); return; }
+
+  const emailCheck = validateEmail(email);
+  if (!emailCheck.valid) { showError(emailCheck.msg); return; }
+
+  const phoneCheck = validatePhone(phone);
+  if (!phoneCheck.valid) { showError(phoneCheck.msg); return; }
+
   if (password.length < 8) { showError('كلمة المرور خاصها 8 أحرف على الأقل'); return; }
 
   let subject = null, level = null, institution = null, parentPhone = null;
@@ -132,7 +247,7 @@ $('signupForm').addEventListener('submit', async (e) => {
     institution = $('suSchool') ? $('suSchool').value.trim() : null;
     if (!subject) { showError('المرجو اختيار المادة'); return; }
     if (!level) { showError('المرجو اختيار المستوى'); return; }
-    if (!institution) { showError('المرجو إدخال اسم المؤسسة'); return; }
+    if (!institution || institution.length < 3) { showError('المرجو إدخال اسم المؤسسة'); return; }
   }
 
   // ═══ حقول التلميذ ═══
@@ -140,9 +255,13 @@ $('signupForm').addEventListener('submit', async (e) => {
     parentPhone = $('suParentPhone') ? $('suParentPhone').value.trim() : null;
     level = $('suStudentLevel') ? $('suStudentLevel').value : null;
     institution = $('suStudentInstitution') ? $('suStudentInstitution').value.trim() : null;
-    if (!parentPhone) { showError('المرجو إدخال رقم هاتف الوالد'); return; }
+
     if (!level) { showError('المرجو اختيار المستوى'); return; }
-    if (!institution) { showError('المرجو إدخال اسم المؤسسة'); return; }
+    if (!institution || institution.length < 3) { showError('المرجو إدخال اسم المؤسسة'); return; }
+
+    const parentPhoneCheck = validatePhone(parentPhone);
+    if (!parentPhoneCheck.valid) { showError('رقم الوالد: ' + parentPhoneCheck.msg); return; }
+    parentPhone = parentPhoneCheck.clean;
   }
 
   $('signupBtn').disabled = true;
@@ -157,7 +276,6 @@ $('signupForm').addEventListener('submit', async (e) => {
     if (authErr) throw authErr;
     if (!authData.user) throw new Error('لم يتم إنشاء الحساب');
 
-    // توليد share_code للأستاذ
     let shareCode = null;
     if (selectedRole === 'teacher') {
       shareCode = genCode(6);
@@ -168,7 +286,7 @@ $('signupForm').addEventListener('submit', async (e) => {
       role: selectedRole,
       full_name: name,
       email: email,
-      phone: phone || null,
+      phone: phoneCheck.clean,
       subject: subject,
       level: level,
       institution: institution,
