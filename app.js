@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════
-// LYCÉE MAROC AI — APP.JS (مع Validation)
+// LYCÉE MAROC AI — APP.JS (مع Validation + Fingerprint)
 // ═══════════════════════════════════════════════════
 
 import { supabase } from './supabase.js';
@@ -11,6 +11,84 @@ const hide = (el) => el.classList.add('hidden');
 let selectedRole = null;
 let currentUser = null;
 let currentProfile = null;
+
+// ═══════════════════════════════════════════════════
+// 🛡️ Device Fingerprint
+// ═══════════════════════════════════════════════════
+
+function getCanvasFingerprint() {
+  try {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.textBaseline = 'top';
+    ctx.font = '14px Arial';
+    ctx.fillStyle = '#f60';
+    ctx.fillRect(125, 1, 62, 20);
+    ctx.fillStyle = '#069';
+    ctx.fillText('Lycée Maroc AI 🎓', 2, 15);
+    ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+    ctx.fillText('Lycée Maroc AI 🎓', 4, 17);
+    return canvas.toDataURL();
+  } catch { return 'no-canvas'; }
+}
+
+function getWebGLFingerprint() {
+  try {
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (!gl) return 'no-webgl';
+    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+    return debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : 'no-info';
+  } catch { return 'no-webgl'; }
+}
+
+async function hashString(str) {
+  try {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(str);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  } catch {
+    // Fallback: hashing بسيط
+    let h = 0;
+    for (let i = 0; i < str.length; i++) {
+      h = ((h << 5) - h) + str.charCodeAt(i);
+      h = h & h;
+    }
+    return Math.abs(h).toString(16).padStart(64, '0');
+  }
+}
+
+async function getDeviceFingerprint() {
+  const components = [
+    navigator.userAgent,
+    navigator.language,
+    navigator.languages ? navigator.languages.join(',') : '',
+    screen.width + 'x' + screen.height,
+    screen.colorDepth,
+    new Date().getTimezoneOffset(),
+    Intl.DateTimeFormat().resolvedOptions().timeZone || '',
+    navigator.hardwareConcurrency || 0,
+    navigator.deviceMemory || 'unknown',
+    navigator.platform || '',
+    navigator.maxTouchPoints || 0,
+    getCanvasFingerprint(),
+    getWebGLFingerprint()
+  ];
+  const str = components.join('|');
+  return await hashString(str);
+}
+
+async function getUserIP() {
+  try {
+    const res = await fetch('https://api.ipify.org?format=json', { cache: 'no-store' });
+    const data = await res.json();
+    return data.ip || 'unknown';
+  } catch {
+    return 'unknown';
+  }
+}
 
 // ═══════════════════════════════════════════════════
 // 🛡️ Validation Functions
@@ -185,7 +263,6 @@ $('suName')?.addEventListener('blur', () => {
   $('suName').style.borderColor = check.valid ? '#4CAF50' : '#E53935';
 });
 
-// رموز الهاتف — غير أرقام
 $('suPhone')?.addEventListener('input', (e) => {
   e.target.value = e.target.value.replace(/[^0-9+]/g, '');
 });
@@ -213,7 +290,7 @@ document.querySelectorAll('.role-btn').forEach(btn => {
   });
 });
 
-// ═══════════ Signup ═══════════
+// ═══════════ Signup (مع Fingerprint Check) ═══════════
 $('signupForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   hide($('errorMsg'));
@@ -265,9 +342,36 @@ $('signupForm').addEventListener('submit', async (e) => {
   }
 
   $('signupBtn').disabled = true;
-  $('signupBtn').textContent = 'جاري التسجيل...';
+  $('signupBtn').textContent = 'جاري التحقق...';
 
   try {
+    // ═══════════════════════════════════════════════════
+    // 🛡️ Fingerprint Check
+    // ═══════════════════════════════════════════════════
+    const fingerprint = await getDeviceFingerprint();
+    const userIP = await getUserIP();
+
+    const { data: trialCheck, error: trialErr } = await supabase
+      .rpc('check_trial_eligibility', {
+        p_fingerprint: fingerprint,
+        p_ip: userIP
+      });
+
+    if (trialErr) {
+      console.error('Trial check error:', trialErr);
+      // نتجاهلو الخطأ ونكملو (باش ما نوقفوش المستعمل)
+    } else if (trialCheck && trialCheck[0] && !trialCheck[0].can_start) {
+      showError(trialCheck[0].reason || '⛔ هاد الجهاز سبق استعمل الفترة المجانية');
+      $('signupBtn').disabled = false;
+      $('signupBtn').textContent = 'إنشاء حسابي';
+      return;
+    }
+
+    // ═══════════════════════════════════════════════════
+    // 🚀 إنشاء الحساب
+    // ═══════════════════════════════════════════════════
+    $('signupBtn').textContent = 'جاري التسجيل...';
+
     const { data: authData, error: authErr } = await supabase.auth.signUp({
       email: email,
       password: password,
@@ -281,6 +385,7 @@ $('signupForm').addEventListener('submit', async (e) => {
       shareCode = genCode(6);
     }
 
+    // ═══ INSERT فـ profiles ═══
     const { error: profErr } = await supabase.from('profiles').insert({
       id: authData.user.id,
       role: selectedRole,
@@ -295,7 +400,29 @@ $('signupForm').addEventListener('submit', async (e) => {
     });
     if (profErr) throw profErr;
 
-    $('successMsg').textContent = '✅ تم إنشاء الحساب بنجاح';
+    // ═══ بدء التجربة (trials) ═══
+    try {
+      const { data: trialStart, error: startErr } = await supabase
+        .rpc('start_trial', {
+          p_fingerprint: fingerprint,
+          p_ip: userIP,
+          p_user_id: authData.user.id,
+          p_email: email,
+          p_phone: phoneCheck.clean,
+          p_days: 15
+        });
+
+      if (startErr) {
+        console.error('Start trial error:', startErr);
+      } else if (trialStart && trialStart[0]) {
+        console.log('✅ Trial started:', trialStart[0].message);
+      }
+    } catch (trialError) {
+      console.error('Trial error:', trialError);
+      // ما كنوقفوش التسجيل، غير كنكملو
+    }
+
+    $('successMsg').textContent = '✅ تم إنشاء الحساب بنجاح — 15 يوم مجانية';
     show($('successMsg'));
 
     setTimeout(() => {
