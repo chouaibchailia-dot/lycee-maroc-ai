@@ -11,16 +11,13 @@
 </head>
 <body>
 
-  <!-- ═══ Login Screen ═══ -->
   <div id="loginScreen" class="login-screen">
     <div class="login-bg-orb orb-1"></div>
     <div class="login-bg-orb orb-2"></div>
     <div class="login-bg-orb orb-3"></div>
     
     <div class="login-box">
-      <div class="login-logo">
-        <div class="logo-glow">🔐</div>
-      </div>
+      <div class="login-logo"><div class="logo-glow">🔐</div></div>
       <h1>منطقة محمية</h1>
       <p class="login-sub">دخول مقيد</p>
 
@@ -29,24 +26,18 @@
           <span class="input-icon">📧</span>
           <input type="email" id="adminEmail" placeholder="البريد الإلكتروني" required autocomplete="off">
         </div>
-
         <div class="input-group-modern">
           <span class="input-icon">🔒</span>
           <input type="password" id="adminPassword" placeholder="كلمة السر" required autocomplete="off">
         </div>
-
-        <button type="submit" id="loginBtn" class="btn-primary-modern">
-          <span>🔐 دخول</span>
-        </button>
+        <button type="submit" id="loginBtn" class="btn-primary-modern"><span>🔐 دخول</span></button>
       </form>
 
       <p id="errorMsg" class="error-msg hidden"></p>
     </div>
   </div>
 
-  <!-- ═══ Admin Panel ═══ -->
   <div id="adminPanel" class="admin-panel hidden">
-
     <header class="admin-header">
       <div class="header-left">
         <div class="logo-brand">
@@ -58,7 +49,7 @@
         </div>
       </div>
       <div class="header-right">
-        <button class="btn-icon-header" id="refreshBtn" title="تحديث">🔄</button>
+        <button class="btn-icon-header" id="refreshBtn">🔄</button>
         <div class="admin-badge">
           <span class="badge-dot"></span>
           <span id="adminName">👤 ......</span>
@@ -84,35 +75,20 @@
         <div class="sidebar-section-title">النظام</div>
         <button class="nav-btn" data-section="appearance"><span>🎨</span> <span>المظهر</span></button>
         <button class="nav-btn" data-section="settings"><span>⚙️</span> <span>الإعدادات</span></button>
+        <button class="nav-btn" data-section="security"><span>🛡️</span> <span>الأمان</span></button>
         <button class="nav-btn" data-section="logs"><span>📋</span> <span>السجل</span></button>
       </aside>
 
       <main class="main-content">
-
         <section id="section-dashboard" class="section active">
-          <div class="section-header">
-            <div>
-              <h2 class="section-title">📊 لوحة القيادة</h2>
-              <p class="section-subtitle">نظرة عامة</p>
-            </div>
-          </div>
-          <div class="stats-grid" id="statsGrid">
-            <div class="loading-modern">⏳ كيتحمل...</div>
-          </div>
+          <div class="section-header"><div><h2 class="section-title">📊 لوحة القيادة</h2><p class="section-subtitle">نظرة عامة</p></div></div>
+          <div class="stats-grid" id="statsGrid"><div class="loading-modern">⏳ كيتحمل...</div></div>
         </section>
 
         <section id="section-users" class="section">
-          <div class="section-header">
-            <div>
-              <h2 class="section-title">👥 المستعملين</h2>
-              <p class="section-subtitle">إدارة المستعملين</p>
-            </div>
-          </div>
+          <div class="section-header"><div><h2 class="section-title">👥 المستعملين</h2><p class="section-subtitle">إدارة المستعملين</p></div></div>
           <div class="filters-modern">
-            <div class="search-modern">
-              <span>🔍</span>
-              <input type="text" id="userSearch" placeholder="بحث...">
-            </div>
+            <div class="search-modern"><span>🔍</span><input type="text" id="userSearch" placeholder="بحث..."></div>
             <select id="userRoleFilter" class="select-modern">
               <option value="">كل الأدوار</option>
               <option value="teacher">👨‍🏫 أستاذ</option>
@@ -123,23 +99,15 @@
               <option value="admin">👑 أدمن</option>
             </select>
           </div>
-          <div id="usersList" class="users-list">
-            <div class="loading-modern">⏳ كيتحمل...</div>
-          </div>
+          <div id="usersList" class="users-list"><div class="loading-modern">⏳ كيتحمل...</div></div>
         </section>
 
         <section id="section-codes" class="section">
-          <div class="section-header">
-            <div>
-              <h2 class="section-title">🎟️ أكواد التفعيل</h2>
-              <p class="section-subtitle">توليد وإدارة</p>
-            </div>
-          </div>
+          <div class="section-header"><div><h2 class="section-title">🎟️ أكواد التفعيل</h2><p class="section-subtitle">توليد وإدارة</p></div></div>
           <div class="card-modern">
             <h3 class="card-title-modern">⚡ توليد كود جديد</h3>
             <div class="form-grid">
-              <div>
-                <label class="form-label-modern">نوع الاشتراك</label>
+              <div><label class="form-label-modern">نوع الاشتراك</label>
                 <select id="codeType" class="input-modern">
                   <option value="weekly">📅 أسبوعي (7 أيام)</option>
                   <option value="monthly" selected>📅 شهري (30 يوم)</option>
@@ -149,8 +117,7 @@
                   <option value="two_years">📅 سنتين (730 يوم)</option>
                 </select>
               </div>
-              <div>
-                <label class="form-label-modern">📧 للإيميل (اختياري)</label>
+              <div><label class="form-label-modern">📧 للإيميل (اختياري)</label>
                 <input type="email" id="codeForEmail" placeholder="email@example.com" class="input-modern">
               </div>
             </div>
@@ -162,45 +129,23 @@
             </div>
           </div>
           <h3 class="sub-title-modern">📋 الأكواد الموجودة</h3>
-          <div id="codesList" class="codes-list">
-            <div class="loading-modern">⏳ كيتحمل...</div>
-          </div>
+          <div id="codesList" class="codes-list"><div class="loading-modern">⏳ كيتحمل...</div></div>
         </section>
 
         <section id="section-subscriptions" class="section">
-          <div class="section-header">
-            <div>
-              <h2 class="section-title">💳 الاشتراكات</h2>
-              <p class="section-subtitle">متابعة</p>
-            </div>
-          </div>
-          <div id="subscriptionsList" class="users-list">
-            <div class="loading-modern">⏳ كيتحمل...</div>
-          </div>
+          <div class="section-header"><div><h2 class="section-title">💳 الاشتراكات</h2><p class="section-subtitle">متابعة</p></div></div>
+          <div id="subscriptionsList" class="users-list"><div class="loading-modern">⏳ كيتحمل...</div></div>
         </section>
 
         <section id="section-messages" class="section">
-          <div class="section-header">
-            <div>
-              <h2 class="section-title">💬 الرسائل</h2>
-              <p class="section-subtitle">تواصل</p>
-            </div>
-          </div>
-          <div id="messagesList" class="users-list">
-            <div class="loading-modern">⏳ كيتحمل...</div>
-          </div>
+          <div class="section-header"><div><h2 class="section-title">💬 الرسائل</h2><p class="section-subtitle">تواصل</p></div></div>
+          <div id="messagesList" class="users-list"><div class="loading-modern">⏳ كيتحمل...</div></div>
         </section>
 
         <section id="section-notifications" class="section">
-          <div class="section-header">
-            <div>
-              <h2 class="section-title">📢 الإشعارات</h2>
-              <p class="section-subtitle">أرسل للمستعملين</p>
-            </div>
-          </div>
+          <div class="section-header"><div><h2 class="section-title">📢 الإشعارات</h2><p class="section-subtitle">أرسل للمستعملين</p></div></div>
           <div class="card-modern">
-            <div class="form-group">
-              <label class="form-label-modern">🎯 الهدف</label>
+            <div class="form-group"><label class="form-label-modern">🎯 الهدف</label>
               <select id="notifTarget" class="input-modern">
                 <option value="all">🌍 الكل</option>
                 <option value="teacher">👨‍🏫 الأساتذة</option>
@@ -208,71 +153,58 @@
                 <option value="parent">👨‍👦 الآباء</option>
               </select>
             </div>
-            <div class="form-group">
-              <label class="form-label-modern">📝 العنوان</label>
-              <input type="text" id="notifTitle" class="input-modern">
-            </div>
-            <div class="form-group">
-              <label class="form-label-modern">💬 الرسالة</label>
-              <textarea id="notifBody" class="input-modern" rows="4"></textarea>
-            </div>
+            <div class="form-group"><label class="form-label-modern">📝 العنوان</label><input type="text" id="notifTitle" class="input-modern"></div>
+            <div class="form-group"><label class="form-label-modern">💬 الرسالة</label><textarea id="notifBody" class="input-modern" rows="4"></textarea></div>
             <button id="sendNotifBtn" class="btn-primary-modern">📤 إرسال</button>
           </div>
         </section>
 
         <section id="section-appearance" class="section">
-          <div class="section-header">
-            <div>
-              <h2 class="section-title">🎨 المظهر</h2>
-              <p class="section-subtitle">الألوان والوضع</p>
-            </div>
-          </div>
+          <div class="section-header"><div><h2 class="section-title">🎨 المظهر</h2><p class="section-subtitle">الألوان والوضع</p></div></div>
           <div class="card-modern">
             <h3 class="card-title-modern">🌈 الألوان</h3>
             <div class="color-picker-grid">
-              <div class="color-picker-item">
-                <label>الرئيسي</label>
-                <input type="color" id="colorPrimary" value="#B71C1C">
-              </div>
-              <div class="color-picker-item">
-                <label>الثانوي</label>
-                <input type="color" id="colorGold" value="#F9A825">
-              </div>
+              <div class="color-picker-item"><label>الرئيسي</label><input type="color" id="colorPrimary" value="#B71C1C"></div>
+              <div class="color-picker-item"><label>الثانوي</label><input type="color" id="colorGold" value="#F9A825"></div>
             </div>
             <button id="saveAppearanceBtn" class="btn-primary-modern">💾 حفظ</button>
           </div>
         </section>
 
         <section id="section-settings" class="section">
+          <div class="section-header"><div><h2 class="section-title">⚙️ الإعدادات</h2><p class="section-subtitle">إعدادات النظام</p></div></div>
+          <div id="settingsList" class="settings-container"><div class="loading-modern">⏳ كيتحمل...</div></div>
+        </section>
+
+        <section id="section-security" class="section">
           <div class="section-header">
-            <div>
-              <h2 class="section-title">⚙️ الإعدادات</h2>
-              <p class="section-subtitle">إعدادات النظام</p>
-            </div>
+            <div><h2 class="section-title">🛡️ الأمان</h2><p class="section-subtitle">مراقبة الحماية</p></div>
+            <button class="btn-secondary-modern" id="emergencyLockBtn" style="background:#ef4444;color:white;border-color:#ef4444;">🚨 قفل طوارئ</button>
           </div>
-          <div id="settingsList" class="settings-container">
-            <div class="loading-modern">⏳ كيتحمل...</div>
+          <div class="stats-grid" id="securityStatsGrid"><div class="loading-modern">⏳ كيتحمل...</div></div>
+          <div class="card-modern">
+            <h3 class="card-title-modern">🔍 آخر محاولات الدخول</h3>
+            <div id="loginAttemptsList" class="users-list"><div class="loading-modern">⏳ كيتحمل...</div></div>
+          </div>
+          <div class="card-modern">
+            <h3 class="card-title-modern">🚫 IPs المحظورة</h3>
+            <div id="blockedIPsList" class="users-list"><div class="loading-modern">⏳ كيتحمل...</div></div>
+          </div>
+          <div class="card-modern">
+            <h3 class="card-title-modern">🔒 الحسابات المقفولة</h3>
+            <div id="lockedAccountsList" class="users-list"><div class="loading-modern">⏳ كيتحمل...</div></div>
           </div>
         </section>
 
         <section id="section-logs" class="section">
-          <div class="section-header">
-            <div>
-              <h2 class="section-title">📋 السجل</h2>
-              <p class="section-subtitle">كل العمليات</p>
-            </div>
-          </div>
-          <div id="logsList" class="users-list">
-            <div class="loading-modern">⏳ كيتحمل...</div>
-          </div>
+          <div class="section-header"><div><h2 class="section-title">📋 السجل</h2><p class="section-subtitle">كل العمليات</p></div></div>
+          <div id="logsList" class="users-list"><div class="loading-modern">⏳ كيتحمل...</div></div>
         </section>
-
       </main>
     </div>
   </div>
 
   <div id="toast" class="toast hidden"></div>
-
   <script type="module" src="admin.js"></script>
 </body>
 </html>
