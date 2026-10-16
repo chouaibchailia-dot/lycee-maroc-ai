@@ -1,12 +1,12 @@
 // ═══════════════════════════════════════════════════
-// LYCÉE MAROC AI — APP.JS (مع Validation + Fingerprint)
+// LYCÉE MAROC AI — APP.JS (Netflix Style + Validation + Fingerprint)
 // ═══════════════════════════════════════════════════
 
 import { supabase } from './supabase.js';
 
 const $ = (id) => document.getElementById(id);
-const show = (el) => el.classList.remove('hidden');
-const hide = (el) => el.classList.add('hidden');
+const show = (el) => { if (el) el.classList.remove('hidden'); };
+const hide = (el) => { if (el) el.classList.add('hidden'); };
 
 let selectedRole = null;
 let currentUser = null;
@@ -50,7 +50,6 @@ async function hashString(str) {
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
   } catch {
-    // Fallback: hashing بسيط
     let h = 0;
     for (let i = 0; i < str.length; i++) {
       h = ((h << 5) - h) + str.charCodeAt(i);
@@ -210,7 +209,7 @@ document.querySelectorAll('.lang-btn').forEach(btn => {
   });
 });
 
-$('goLogin').addEventListener('click', () => {
+$('goLogin')?.addEventListener('click', () => {
   hide($('welcomeScreen'));
   show($('authScreen'));
   hide($('signupForm'));
@@ -218,7 +217,7 @@ $('goLogin').addEventListener('click', () => {
   $('authTitle').textContent = 'تسجيل الدخول';
 });
 
-$('goSignup').addEventListener('click', () => {
+$('goSignup')?.addEventListener('click', () => {
   hide($('welcomeScreen'));
   show($('authScreen'));
   show($('signupForm'));
@@ -226,7 +225,7 @@ $('goSignup').addEventListener('click', () => {
   $('authTitle').textContent = 'إنشاء حساب جديد';
 });
 
-$('backBtn').addEventListener('click', () => {
+$('backBtn')?.addEventListener('click', () => {
   hide($('authScreen'));
   show($('welcomeScreen'));
   hide($('errorMsg'));
@@ -291,7 +290,7 @@ document.querySelectorAll('.role-btn').forEach(btn => {
 });
 
 // ═══════════ Signup (مع Fingerprint Check) ═══════════
-$('signupForm').addEventListener('submit', async (e) => {
+$('signupForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   hide($('errorMsg'));
   hide($('successMsg'));
@@ -303,7 +302,6 @@ $('signupForm').addEventListener('submit', async (e) => {
 
   if (!selectedRole) { showError('المرجو اختيار الدور'); return; }
 
-  // ═══ Validation ═══
   const nameCheck = validateName(name);
   if (!nameCheck.valid) { showError(nameCheck.msg); return; }
 
@@ -317,7 +315,6 @@ $('signupForm').addEventListener('submit', async (e) => {
 
   let subject = null, level = null, institution = null, parentPhone = null;
 
-  // ═══ حقول الأستاذ ═══
   if (selectedRole === 'teacher') {
     subject = $('suSubject') ? $('suSubject').value : null;
     level = $('suLevel') ? $('suLevel').value : null;
@@ -327,7 +324,6 @@ $('signupForm').addEventListener('submit', async (e) => {
     if (!institution || institution.length < 3) { showError('المرجو إدخال اسم المؤسسة'); return; }
   }
 
-  // ═══ حقول التلميذ ═══
   if (selectedRole === 'student') {
     parentPhone = $('suParentPhone') ? $('suParentPhone').value.trim() : null;
     level = $('suStudentLevel') ? $('suStudentLevel').value : null;
@@ -345,9 +341,6 @@ $('signupForm').addEventListener('submit', async (e) => {
   $('signupBtn').textContent = 'جاري التحقق...';
 
   try {
-    // ═══════════════════════════════════════════════════
-    // 🛡️ Fingerprint Check
-    // ═══════════════════════════════════════════════════
     const fingerprint = await getDeviceFingerprint();
     const userIP = await getUserIP();
 
@@ -359,7 +352,6 @@ $('signupForm').addEventListener('submit', async (e) => {
 
     if (trialErr) {
       console.error('Trial check error:', trialErr);
-      // نتجاهلو الخطأ ونكملو (باش ما نوقفوش المستعمل)
     } else if (trialCheck && trialCheck[0] && !trialCheck[0].can_start) {
       showError(trialCheck[0].reason || '⛔ هاد الجهاز سبق استعمل الفترة المجانية');
       $('signupBtn').disabled = false;
@@ -367,9 +359,6 @@ $('signupForm').addEventListener('submit', async (e) => {
       return;
     }
 
-    // ═══════════════════════════════════════════════════
-    // 🚀 إنشاء الحساب
-    // ═══════════════════════════════════════════════════
     $('signupBtn').textContent = 'جاري التسجيل...';
 
     const { data: authData, error: authErr } = await supabase.auth.signUp({
@@ -385,7 +374,6 @@ $('signupForm').addEventListener('submit', async (e) => {
       shareCode = genCode(6);
     }
 
-    // ═══ INSERT فـ profiles ═══
     const { error: profErr } = await supabase.from('profiles').insert({
       id: authData.user.id,
       role: selectedRole,
@@ -400,7 +388,6 @@ $('signupForm').addEventListener('submit', async (e) => {
     });
     if (profErr) throw profErr;
 
-    // ═══ بدء التجربة (trials) ═══
     try {
       const { data: trialStart, error: startErr } = await supabase
         .rpc('start_trial', {
@@ -419,10 +406,10 @@ $('signupForm').addEventListener('submit', async (e) => {
       }
     } catch (trialError) {
       console.error('Trial error:', trialError);
-      // ما كنوقفوش التسجيل، غير كنكملو
     }
 
-    $('successMsg').textContent = '✅ تم إنشاء الحساب بنجاح — 15 يوم مجانية';
+    // ✅ Netflix Style — بلا "15 يوم مجانية"
+    $('successMsg').textContent = '✅ تم إنشاء الحساب بنجاح';
     show($('successMsg'));
 
     setTimeout(() => {
@@ -444,17 +431,17 @@ $('signupForm').addEventListener('submit', async (e) => {
 });
 
 // ═══════════ Code Reveal ═══════════
-$('copyRevealBtn').addEventListener('click', () => {
+$('copyRevealBtn')?.addEventListener('click', () => {
   copyText($('revealCode').textContent);
 });
 
-$('continueBtn').addEventListener('click', async () => {
+$('continueBtn')?.addEventListener('click', async () => {
   const { data: { user } } = await supabase.auth.getUser();
   if (user) await loadUserAndDashboard(user.id);
 });
 
 // ═══════════ Login ═══════════
-$('loginForm').addEventListener('submit', async (e) => {
+$('loginForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   hide($('errorMsg'));
   hide($('successMsg'));
@@ -473,17 +460,17 @@ $('loginForm').addEventListener('submit', async (e) => {
 });
 
 // ═══════════ Logout ═══════════
-$('logoutBtn').addEventListener('click', async () => {
+$('logoutBtn')?.addEventListener('click', async () => {
   await supabase.auth.signOut();
   location.reload();
 });
 
 // ═══════════ Settings ═══════════
-$('settingsBtn').addEventListener('click', () => {
+$('settingsBtn')?.addEventListener('click', () => {
   toast('⚙️ الإعدادات قريباً...', 'info');
 });
 
-// ═══════════ Load User + Dashboard ═══════════
+// ═══════════ Load User + Dashboard (Netflix Style) ═══════════
 async function loadUserAndDashboard(userId) {
   try {
     const { data: profile, error } = await supabase
@@ -498,6 +485,44 @@ async function loadUserAndDashboard(userId) {
     currentUser = { id: userId, email: profile.email };
     currentProfile = profile;
 
+    // ═══════════════════════════════════════════════
+    // 🎬 Netflix Style — فحص حالة الحساب
+    // ═══════════════════════════════════════════════
+    try {
+      const { data: accData, error: accErr } = await supabase.rpc('check_account_active');
+
+      if (accErr) {
+        console.error('Account check error:', accErr);
+        // نتجاهلو ونكملو (باش ما نوقفوش المستعمل)
+      } else {
+        const acc = accData && accData[0];
+        if (acc && acc.is_active === false) {
+          // الحساب غير نشط → شاشة الدعم
+          hide($('splash'));
+          hide($('langScreen'));
+          hide($('welcomeScreen'));
+          hide($('authScreen'));
+          hide($('codeRevealScreen'));
+          hide($('dashboardScreen'));
+
+          const inactiveScreen = $('accountInactiveScreen');
+          if (inactiveScreen) {
+            show(inactiveScreen);
+          } else {
+            // Fallback: ما كايناش الشاشة فـ HTML
+            alert('⏸️ الحساب غير نشط — تواصل مع الدعم: info@lycee-maroc.com');
+            await supabase.auth.signOut();
+            location.reload();
+          }
+          return;
+        }
+      }
+    } catch (accCheckErr) {
+      console.error('Account check exception:', accCheckErr);
+      // نتجاهلو ونكملو
+    }
+
+    // الحساب نشط → Dashboard عادي
     hide($('splash'));
     hide($('langScreen'));
     hide($('welcomeScreen'));
