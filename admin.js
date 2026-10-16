@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════
-// LYCÉE MAROC AI — ADMIN.JS (النسخة النهائية الكاملة)
+// LYCÉE MAROC AI — ADMIN.JS (النسخة النهائية)
 // ═══════════════════════════════════════════════════
 
 import { supabase } from './supabase.js';
@@ -10,6 +10,32 @@ const hide = (el) => el.classList.add('hidden');
 
 let currentAdmin = null;
 let currentSettings = {};
+
+// ═══════════ Session Timeout ═══════════
+const SESSION_TIMEOUT_MIN = 10;
+const SESSION_TIMEOUT_MS = SESSION_TIMEOUT_MIN * 60 * 1000;
+let sessionTimer = null;
+
+function resetSessionTimer() {
+  if (sessionTimer) clearTimeout(sessionTimer);
+  sessionTimer = setTimeout(async () => {
+    alert('⏰ الجلسة انتهت بعد ' + SESSION_TIMEOUT_MIN + ' دقيقة بلا نشاط.\nغادي يخرجك دابا.');
+    await supabase.auth.signOut();
+    location.reload();
+  }, SESSION_TIMEOUT_MS);
+}
+
+function startSessionMonitor() {
+  resetSessionTimer();
+  ['click', 'keypress', 'scroll', 'touchstart', 'mousemove'].forEach(evt => {
+    document.addEventListener(evt, resetSessionTimer, { passive: true });
+  });
+}
+
+function stopSessionMonitor() {
+  if (sessionTimer) clearTimeout(sessionTimer);
+  sessionTimer = null;
+}
 
 // ═══════════ Chart Instances ═══════════
 let chartSignups = null;
@@ -78,6 +104,7 @@ $('loginForm').addEventListener('submit', async (e) => {
     toast('✅ مرحباً ' + profile.full_name, 'success');
 
     await loadAllData();
+    startSessionMonitor();
 
   } catch (err) {
     console.error('Login error:', err);
@@ -101,6 +128,7 @@ async function loadAllData() {
 }
 
 $('logoutBtn').addEventListener('click', async () => {
+  stopSessionMonitor();
   await supabase.auth.signOut();
   location.reload();
 });
@@ -154,7 +182,6 @@ async function loadStats() {
     container.innerHTML = '<div class="empty-admin">❌ ' + escapeHtml(err.message) + '</div>';
   }
 
-  // تحديث الرسوم البيانية
   if (typeof loadCharts === 'function') {
     await loadCharts();
   }
@@ -171,7 +198,6 @@ async function loadCharts() {
     const { data: users } = await supabase.rpc('admin_get_all_users');
     const allUsers = users || [];
 
-    // 1. Signups (آخر 7 أيام)
     const last7Days = [];
     const labels7 = [];
     const today = new Date();
@@ -221,7 +247,6 @@ async function loadCharts() {
       });
     }
 
-    // 2. Roles (Pie)
     const roleCounts = { teacher: 0, student: 0, parent: 0, guard: 0, director: 0, admin: 0 };
     allUsers.forEach(u => { if (roleCounts[u.out_role] !== undefined) roleCounts[u.out_role]++; });
 
@@ -249,7 +274,6 @@ async function loadCharts() {
       });
     }
 
-    // 3. Institutions (Bar)
     const instCounts = {};
     allUsers.forEach(u => {
       const inst = u.out_institution || 'غير محدد';
@@ -902,6 +926,7 @@ supabase.auth.getSession().then(async ({ data: { session } }) => {
     show($('adminPanel'));
     $('adminName').textContent = '👤 ' + (profile.full_name || 'الأدمن');
     await loadAllData();
+    startSessionMonitor();
   } catch (err) {
     console.error('Session error:', err);
   }
