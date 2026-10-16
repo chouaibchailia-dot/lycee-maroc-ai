@@ -11,6 +11,11 @@ const hide = (el) => el.classList.add('hidden');
 let currentAdmin = null;
 let currentSettings = {};
 
+// ═══════════ Chart Instances ═══════════
+let chartSignups = null;
+let chartRoles = null;
+let chartInstitutions = null;
+
 // ═══════════ Helpers ═══════════
 function toast(msg, type = 'info') {
   const t = $('toast');
@@ -92,6 +97,7 @@ async function loadAllData() {
   await loadSubscriptions();
   await loadMessages();
   await loadSettings();
+  await loadCharts();
 }
 
 $('logoutBtn').addEventListener('click', async () => {
@@ -146,6 +152,146 @@ async function loadStats() {
     `;
   } catch (err) {
     container.innerHTML = '<div class="empty-admin">❌ ' + escapeHtml(err.message) + '</div>';
+  }
+
+  // تحديث الرسوم البيانية
+  if (typeof loadCharts === 'function') {
+    await loadCharts();
+  }
+}
+
+// ═══════════ Load Charts ═══════════
+async function loadCharts() {
+  if (typeof Chart === 'undefined') {
+    console.warn('Chart.js not loaded');
+    return;
+  }
+
+  try {
+    const { data: users } = await supabase.rpc('admin_get_all_users');
+    const allUsers = users || [];
+
+    // 1. Signups (آخر 7 أيام)
+    const last7Days = [];
+    const labels7 = [];
+    const today = new Date();
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().split('T')[0];
+      labels7.push(d.toLocaleDateString('ar-MA', { weekday: 'short' }));
+      const count = allUsers.filter(u => {
+        if (!u.out_created_at) return false;
+        return u.out_created_at.startsWith(dateStr);
+      }).length;
+      last7Days.push(count);
+    }
+
+    const canvas1 = document.getElementById('chartSignups');
+    if (canvas1) {
+      if (chartSignups) chartSignups.destroy();
+      chartSignups = new Chart(canvas1, {
+        type: 'line',
+        data: {
+          labels: labels7,
+          datasets: [{
+            label: 'التسجيلات',
+            data: last7Days,
+            borderColor: '#F9A825',
+            backgroundColor: 'rgba(249,168,37,0.15)',
+            borderWidth: 3,
+            tension: 0.4,
+            fill: true,
+            pointBackgroundColor: '#B71C1C',
+            pointBorderColor: '#F9A825',
+            pointRadius: 5
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#f1f5f9', font: { family: 'Cairo', size: 12 } } }
+          },
+          scales: {
+            x: { ticks: { color: '#94a3b8', font: { family: 'Cairo' } }, grid: { color: '#334155' } },
+            y: { beginAtZero: true, ticks: { color: '#94a3b8', font: { family: 'Cairo' }, stepSize: 1 }, grid: { color: '#334155' } }
+          }
+        }
+      });
+    }
+
+    // 2. Roles (Pie)
+    const roleCounts = { teacher: 0, student: 0, parent: 0, guard: 0, director: 0, admin: 0 };
+    allUsers.forEach(u => { if (roleCounts[u.out_role] !== undefined) roleCounts[u.out_role]++; });
+
+    const canvas2 = document.getElementById('chartRoles');
+    if (canvas2) {
+      if (chartRoles) chartRoles.destroy();
+      chartRoles = new Chart(canvas2, {
+        type: 'doughnut',
+        data: {
+          labels: ['👨‍🏫 أستاذ', '🎓 تلميذ', '👨‍👦 ولي أمر', '🛡️ حارس', '🏛️ مدير', '👑 أدمن'],
+          datasets: [{
+            data: [roleCounts.teacher, roleCounts.student, roleCounts.parent, roleCounts.guard, roleCounts.director, roleCounts.admin],
+            backgroundColor: ['#ef4444', '#60a5fa', '#34d399', '#fbbf24', '#c084fc', '#F9A825'],
+            borderColor: '#1e293b',
+            borderWidth: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { color: '#f1f5f9', font: { family: 'Cairo', size: 11 }, padding: 10 } }
+          }
+        }
+      });
+    }
+
+    // 3. Institutions (Bar)
+    const instCounts = {};
+    allUsers.forEach(u => {
+      const inst = u.out_institution || 'غير محدد';
+      instCounts[inst] = (instCounts[inst] || 0) + 1;
+    });
+
+    const sorted = Object.entries(instCounts).sort((a, b) => b[1] - a[1]).slice(0, 8);
+    const instLabels = sorted.map(x => x[0]);
+    const instData = sorted.map(x => x[1]);
+
+    const canvas3 = document.getElementById('chartInstitutions');
+    if (canvas3) {
+      if (chartInstitutions) chartInstitutions.destroy();
+      chartInstitutions = new Chart(canvas3, {
+        type: 'bar',
+        data: {
+          labels: instLabels,
+          datasets: [{
+            label: 'عدد المستعملين',
+            data: instData,
+            backgroundColor: 'rgba(183,28,28,0.7)',
+            borderColor: '#F9A825',
+            borderWidth: 2,
+            borderRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#f1f5f9', font: { family: 'Cairo', size: 12 } } }
+          },
+          scales: {
+            x: { ticks: { color: '#94a3b8', font: { family: 'Cairo', size: 10 } }, grid: { display: false } },
+            y: { beginAtZero: true, ticks: { color: '#94a3b8', font: { family: 'Cairo' }, stepSize: 1 }, grid: { color: '#334155' } }
+          }
+        }
+      });
+    }
+
+  } catch (err) {
+    console.error('Charts error:', err);
   }
 }
 
