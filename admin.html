@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة الأدمن — Lycée Maroc AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <!-- ═══ شاشة تسجيل الدخول ═══ -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-box">
+      <div class="login-logo">👑</div>
+      <h1>لوحة الأدمن</h1>
+      <p class="login-sub">Lycée Maroc AI — الإدارة العامة</p>
+
+      <form id="loginForm">
+        <label class="form-label">📧 البريد الإلكتروني</label>
+        <input type="email" id="adminEmail" placeholder="admin@lycee-maroc.com" required autocomplete="email">
+
+        <label class="form-label">🔒 كلمة السر</label>
+        <input type="password" id="adminPassword" placeholder="••••••••" required autocomplete="current-password">
+
+        <button type="submit" id="loginBtn" class="btn-primary">🔐 دخول</button>
+      </form>
+
+      <p id="errorMsg" class="error-msg hidden"></p>
+    </div>
+  </div>
+
+  <!-- ═══ لوحة الأدمن ═══ -->
+  <div id="adminPanel" class="admin-panel hidden">
+
+    <!-- Header -->
+    <header class="admin-header">
+      <div class="header-left">
+        <span class="logo-mini">👑</span>
+        <div>
+          <h1>لوحة الأدمن</h1>
+          <p class="header-sub">Lycée Maroc AI</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <span id="adminName" class="admin-name">👤 ......</span>
+        <button id="logoutBtn" class="btn-logout">🚪 خروج</button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <button class="nav-btn active" data-section="dashboard">
+          <span>📊</span> <span>الرئيسية</span>
+        </button>
+        <button class="nav-btn" data-section="users">
+          <span>👥</span> <span>المستعملين</span>
+        </button>
+        <button class="nav-btn" data-section="codes">
+          <span>🎟️</span> <span>أكواد التفعيل</span>
+        </button>
+        <button class="nav-btn" data-section="subscriptions">
+          <span>💳</span> <span>الاشتراكات</span>
+        </button>
+        <button class="nav-btn" data-section="logs">
+          <span>📋</span> <span>السجل</span>
+        </button>
+        <button class="nav-btn" data-section="settings">
+          <span>⚙️</span> <span>الإعدادات</span>
+        </button>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+
+        <!-- Section: Dashboard -->
+        <section id="section-dashboard" class="section active">
+          <h2 class="section-title">📊 الإحصائيات العامة</h2>
+          <div class="stats-grid" id="statsGrid">
+            <div class="loading">⏳ كيتحمل...</div>
+          </div>
+        </section>
+
+        <!-- Section: Users -->
+        <section id="section-users" class="section">
+          <h2 class="section-title">👥 المستعملين</h2>
+
+          <div class="filters">
+            <input type="text" id="userSearch" placeholder="🔍 بحث بالاسم أو الإيميل..." class="input-search">
+            <select id="userRoleFilter" class="select-filter">
+              <option value="">كل الأدوار</option>
+              <option value="teacher">👨‍🏫 أستاذ</option>
+              <option value="student">🎓 تلميذ</option>
+              <option value="parent">👨‍👦 ولي أمر</option>
+              <option value="guard">🛡️ حارس</option>
+              <option value="director">🏛️ مدير</option>
+              <option value="admin">👑 أدمن</option>
+            </select>
+          </div>
+
+          <div id="usersList" class="users-list">
+            <div class="loading">⏳ كيتحمل...</div>
+          </div>
+        </section>
+
+        <!-- Section: Codes -->
+        <section id="section-codes" class="section">
+          <h2 class="section-title">🎟️ أكواد التفعيل</h2>
+
+          <div class="generate-box">
+            <h3>🎟️ توليد كود جديد</h3>
+
+            <label class="form-label">نوع الاشتراك</label>
+            <select id="codeType" class="input-full">
+              <option value="weekly">📅 أسبوعي (7 أيام)</option>
+              <option value="monthly" selected>📅 شهري (30 يوم)</option>
+              <option value="quarterly">📅 3 أشهر (90 يوم)</option>
+              <option value="half_yearly">📅 6 أشهر (180 يوم)</option>
+              <option value="yearly">📅 سنوي (365 يوم)</option>
+              <option value="two_years">📅 سنتين (730 يوم)</option>
+            </select>
+
+            <label class="form-label">📧 للإيميل (اختياري)</label>
+            <input type="email" id="codeForEmail" placeholder="email@example.com (ولا خليه فارغ)" class="input-full">
+
+            <button id="generateCodeBtn" class="btn-primary">🎟️ توليد الكود</button>
+
+            <div id="generatedCodeBox" class="generated-code-box hidden">
+              <p>✅ الكود الجديد:</p>
+              <div class="code-big" id="generatedCode">------</div>
+              <button id="copyCodeBtn" class="btn-copy">📋 نسخ</button>
+            </div>
+          </div>
+
+          <h3 class="sub-title">📋 الأكواد الموجودة</h3>
+          <div id="codesList" class="codes-list">
+            <div class="loading">⏳ كيتحمل...</div>
+          </div>
+        </section>
+
+        <!-- Section: Subscriptions -->
+        <section id="section-subscriptions" class="section">
+          <h2 class="section-title">💳 الاشتراكات</h2>
+          <div id="subscriptionsList" class="users-list">
+            <div class="loading">⏳ كيتحمل...</div>
+          </div>
+        </section>
+
+        <!-- Section: Logs -->
+        <section id="section-logs" class="section">
+          <h2 class="section-title">📋 السجل</h2>
+          <div id="logsList" class="users-list">
+            <div class="loading">⏳ كيتحمل...</div>
+          </div>
+        </section>
+
+        <!-- Section: Settings -->
+        <section id="section-settings" class="section">
+          <h2 class="section-title">⚙️ الإعدادات</h2>
+          <div class="settings-box">
+            <p class="coming-soon">🚧 قريباً...</p>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
