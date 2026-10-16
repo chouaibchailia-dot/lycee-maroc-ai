@@ -2,6 +2,4 @@ User-agent: *
 Disallow: /n7k3x9m2.html
 Disallow: /admin.css
 Disallow: /admin.js
-Disallow: /
-
-Sitemap: https://lycee-maroc-ai.vercel.app/sitemap.xml
+Allow: /
