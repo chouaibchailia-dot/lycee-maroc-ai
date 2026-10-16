@@ -8,6 +8,7 @@
   <title>...</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
@@ -83,6 +84,28 @@
         <section id="section-dashboard" class="section active">
           <div class="section-header"><div><h2 class="section-title">📊 لوحة القيادة</h2><p class="section-subtitle">نظرة عامة</p></div></div>
           <div class="stats-grid" id="statsGrid"><div class="loading-modern">⏳ كيتحمل...</div></div>
+          
+          <div class="charts-grid">
+            <div class="card-modern">
+              <h3 class="card-title-modern">📈 التسجيلات (آخر 7 أيام)</h3>
+              <div style="position:relative;height:250px;">
+                <canvas id="chartSignups"></canvas>
+              </div>
+            </div>
+            <div class="card-modern">
+              <h3 class="card-title-modern">🥧 توزيع الأدوار</h3>
+              <div style="position:relative;height:250px;">
+                <canvas id="chartRoles"></canvas>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card-modern" style="margin-top:15px;">
+            <h3 class="card-title-modern">🏫 توزيع حسب المؤسسة</h3>
+            <div style="position:relative;height:280px;">
+              <canvas id="chartInstitutions"></canvas>
+            </div>
+          </div>
         </section>
 
         <section id="section-users" class="section">
