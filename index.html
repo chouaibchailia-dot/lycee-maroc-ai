@@ -44,6 +44,10 @@
     .btn-outline { background:transparent; color:var(--primary); border:2px solid var(--primary); }
     .btn-link { background:transparent; color:var(--primary); font-weight:600; border:none; text-decoration:underline; cursor:pointer; margin-top:10px; font-size:14px; }
     
+    .roles { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+    .role-btn { padding:14px; border:2px solid var(--border); border-radius:10px; background:var(--card); cursor:pointer; font-family:inherit; font-weight:700; font-size:14px; color:var(--text-2); display:flex; flex-direction:column; align-items:center; gap:6px; }
+    .role-btn.selected { border-color:var(--primary); background:rgba(183,28,28,0.05); color:var(--primary); }
+    
     .credentials-box { background:rgba(249,168,37,0.1); border:2px dashed var(--gold); border-radius:12px; padding:18px; margin:12px 0; }
     .cred-item { text-align:center; margin-bottom:12px; padding-bottom:12px; border-bottom:1px dashed rgba(0,0,0,0.1); }
     .cred-item:last-child { margin:0; padding:0; border:none; }
@@ -123,6 +127,13 @@
     <div class="card">
       <button class="btn-link" style="text-align:right; display:block; margin-bottom:12px; text-decoration:none;" onclick="showScreen('welcomeScreen')">← رجوع</button>
       <h2 class="title">إنشاء حساب جديد</h2>
+      
+      <label class="label">اختر الدور *</label>
+      <div class="roles">
+        <button type="button" class="role-btn selected" data-role="teacher" onclick="selectRole('teacher', this)">👨‍🏫 أستاذ</button>
+        <button type="button" class="role-btn" data-role="student" onclick="selectRole('student', this)">🎓 تلميذ</button>
+      </div>
+      
       <input type="text" id="suName" class="input" placeholder="الاسم الكامل *">
       <label class="label">المادة *</label>
       <select id="suSubject" class="select">
@@ -149,9 +160,8 @@
       <h2 class="title" style="color:var(--success);">✅ تم إنشاء الحساب</h2>
       <p style="text-align:center; color:var(--text-2); font-size:13px; margin-bottom:10px;">احفظ هاد المعلومات مزيان</p>
       <div class="credentials-box">
-        <div class="cred-item"><div class="cred-label">🎟️ رقم الدخول</div><div class="cred-value" id="genNumber">----------</div></div>
+        <div class="cred-item"><div class="cred-label">🆔 اسمك (للدخول)</div><div class="cred-value" id="genName" style="font-size:16px;">----------</div></div>
         <div class="cred-item"><div class="cred-label">🔒 كلمة المرور</div><div class="cred-value" id="genPassword">----------</div></div>
-        <div class="cred-item"><div class="cred-label">🆔 اسمك</div><div class="cred-value" id="genName" style="font-size:15px;">----------</div></div>
         <div class="cred-item"><div class="cred-label">🎟️ كود المشاركة</div><div class="cred-value" id="genShareCode">----------</div></div>
       </div>
       <div class="warning">⚠️ إلا نسيت كلمة المرور، تواصل مع الإدارة</div>
@@ -164,7 +174,7 @@
     <div class="card">
       <button class="btn-link" style="text-align:right; display:block; margin-bottom:12px; text-decoration:none;" onclick="showScreen('welcomeScreen')">← رجوع</button>
       <h2 class="title">تسجيل الدخول</h2>
-      <input type="tel" id="loginNumber" class="input" placeholder="رقم الدخول (10 أرقام)" maxlength="10" inputmode="numeric">
+      <input type="text" id="loginName" class="input" placeholder="اسمك الكامل">
       <input type="password" id="loginPassword" class="input" placeholder="كلمة المرور">
       <button class="btn btn-primary" id="loginBtn" onclick="doLogin()" style="margin-top:10px;">دخول</button>
       <button class="btn-link" onclick="showScreen('forgotScreen')" style="display:block; margin:12px auto 0;">نسيت كلمة المرور؟</button>
@@ -175,8 +185,8 @@
     <div class="card">
       <button class="btn-link" style="text-align:right; display:block; margin-bottom:12px; text-decoration:none;" onclick="showScreen('welcomeScreen')">← رجوع</button>
       <h2 class="title">🔑 نسيت كلمة المرور</h2>
-      <p style="text-align:center; color:var(--text-2); font-size:13px; margin-bottom:12px;">دخل الاسم أو رقم الدخول ديالك</p>
-      <input type="text" id="forgotInput" class="input" placeholder="الاسم أو رقم الدخول">
+      <p style="text-align:center; color:var(--text-2); font-size:13px; margin-bottom:12px;">دخل اسمك</p>
+      <input type="text" id="forgotInput" class="input" placeholder="اسمك الكامل">
       <button class="btn btn-primary" onclick="sendWhatsApp()" style="margin-top:10px;">📱 تواصل على واتساب</button>
     </div>
   </div>
@@ -195,7 +205,7 @@
     <div class="dash-header">
       <div>
         <h1 id="dashName">مرحباً</h1>
-        <span class="role-badge">أستاذ</span>
+        <span class="role-badge" id="dashRole">أستاذ</span>
       </div>
       <div class="header-actions">
         <button class="btn-icon" onclick="toggleTheme()" id="themeBtn">🌙</button>
@@ -237,9 +247,9 @@
 
     const ADMIN_WA = '212600000000';
     const FAKE_DOMAIN = '@lycee-maroc.ai';
-    const FINGERPRINT_ENABLED = false;
 
     let CURRENT_PROFILE = null;
+    let selectedRole = 'teacher';
 
     window.showScreen = (id) => {
       ['welcomeScreen','signupScreen','credentialsScreen','loginScreen','forgotScreen','dashboardScreen','inactiveScreen'].forEach(s => {
@@ -257,6 +267,12 @@
       setTimeout(() => t.remove(), 3500);
     };
 
+    window.selectRole = (role, btn) => {
+      document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedRole = role;
+    };
+
     window.toggleTheme = () => {
       document.body.classList.toggle('dark');
       const isDark = document.body.classList.contains('dark');
@@ -266,22 +282,6 @@
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark');
       setTimeout(() => document.getElementById('themeBtn').textContent = '☀️', 100);
-    }
-
-    async function getFingerprint() {
-      const str = navigator.userAgent + screen.width + screen.height + navigator.language + (navigator.hardwareConcurrency || 0);
-      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-    }
-
-    async function genUniqueNumber() {
-      for (let i = 0; i < 30; i++) {
-        let num = '18';
-        for (let j = 0; j < 8; j++) num += Math.floor(Math.random() * 10);
-        const { data } = await supabase.from('profiles').select('id').eq('login_number', num).maybeSingle();
-        if (!data) return num;
-      }
-      throw new Error('فشل توليد رقم');
     }
 
     async function genShareCode() {
@@ -334,57 +334,34 @@
           if (phoneCheck) throw new Error('هاد الهاتف مستعمل');
         }
 
-        const fp = await getFingerprint();
-        if (FINGERPRINT_ENABLED) {
-          const { data: fpCheck } = await supabase.from('trials').select('ends_at').eq('fingerprint', fp).order('started_at', { ascending: false }).limit(1).maybeSingle();
-          if (fpCheck && new Date(fpCheck.ends_at) > new Date()) {
-            throw new Error('هاد الهاتف سبق استافد من التجربة المجانية');
-          }
-        }
-
         const uniqueName = await getUniqueName(name);
-        const loginNumber = await genUniqueNumber();
         const shareCode = await genShareCode();
 
-        const fakeEmail = `${loginNumber}${FAKE_DOMAIN}`;
+        const fakeEmail = `user_${Date.now().toString(36)}${FAKE_DOMAIN}`;
         const { data: auth, error: authErr } = await supabase.auth.signUp({ email: fakeEmail, password });
         if (authErr) throw authErr;
 
         const { error: profErr } = await supabase.from('profiles').insert({
           id: auth.user.id,
-          role: 'teacher',
+          role: selectedRole,
           full_name: uniqueName,
           phone: phone || null,
           subject,
           level,
           plain_password: password,
-          login_number: loginNumber,
           share_code: shareCode,
           email: fakeEmail
         });
         if (profErr) throw profErr;
 
-        for (let i = 1; i <= 5; i++) {
-          await supabase.from('teacher_groups').insert({
-            teacher_id: auth.user.id,
-            name: `فوج ${i}`
-          });
+        if (selectedRole === 'teacher') {
+          for (let i = 1; i <= 5; i++) {
+            await supabase.from('teacher_groups').insert({ teacher_id: auth.user.id, name: `فوج ${i}` });
+          }
         }
 
-        if (FINGERPRINT_ENABLED) {
-          await supabase.from('trials').insert({
-            fingerprint: fp,
-            user_id: auth.user.id,
-            email: fakeEmail,
-            phone: phone || null,
-            started_at: new Date().toISOString(),
-            ends_at: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString()
-          });
-        }
-
-        document.getElementById('genNumber').textContent = loginNumber;
-        document.getElementById('genPassword').textContent = password;
         document.getElementById('genName').textContent = uniqueName;
+        document.getElementById('genPassword').textContent = password;
         document.getElementById('genShareCode').textContent = shareCode;
         showScreen('credentialsScreen');
         toast('✅ تم إنشاء الحساب بنجاح', 'success');
@@ -402,24 +379,26 @@
     };
 
     window.copyAll = () => {
-      const txt = `رقم الدخول: ${document.getElementById('genNumber').textContent}\nكلمة المرور: ${document.getElementById('genPassword').textContent}\nالاسم: ${document.getElementById('genName').textContent}\nكود المشاركة: ${document.getElementById('genShareCode').textContent}`;
+      const txt = `الاسم: ${document.getElementById('genName').textContent}\nكلمة المرور: ${document.getElementById('genPassword').textContent}\nكود المشاركة: ${document.getElementById('genShareCode').textContent}`;
       navigator.clipboard.writeText(txt);
       toast('✅ تم النسخ', 'success');
     };
 
     window.doLogin = async () => {
-      const number = document.getElementById('loginNumber').value.trim();
+      const name = document.getElementById('loginName').value.trim();
       const password = document.getElementById('loginPassword').value;
-      if (!number || !password) return toast('دخل المعلومات', 'error');
+      if (!name || !password) return toast('دخل الاسم وكلمة المرور', 'error');
 
       const btn = document.getElementById('loginBtn');
       btn.disabled = true;
       btn.innerHTML = '<span class="loader-spin"></span>...';
 
       try {
-        const fakeEmail = `${number}${FAKE_DOMAIN}`;
-        const { data, error } = await supabase.auth.signInWithPassword({ email: fakeEmail, password });
-        if (error) throw new Error('رقم الدخول أو كلمة المرور غالطة');
+        const { data: profile, error: profErr } = await supabase.from('profiles').select('email').eq('full_name', name).maybeSingle();
+        if (profErr || !profile || !profile.email) throw new Error('هاد الاسم ما كاينش');
+
+        const { data, error } = await supabase.auth.signInWithPassword({ email: profile.email, password });
+        if (error) throw new Error('كلمة المرور غالطة');
         await loadDashboard(data.user.id);
       } catch (err) {
         toast(err.message, 'error');
@@ -437,8 +416,8 @@
 
     window.sendWhatsApp = () => {
       const input = document.getElementById('forgotInput').value.trim();
-      if (!input) return toast('دخل الاسم أو الرقم', 'error');
-      const msg = encodeURIComponent(`السلام، نسيت كلمة المرور ديالي فـ تطبيق Lycée Maroc AI.\nالاسم / الرقم: ${input}`);
+      if (!input) return toast('دخل اسمك', 'error');
+      const msg = encodeURIComponent(`السلام، نسيت كلمة المرور ديالي فـ تطبيق Lycée Maroc AI.\nالاسم: ${input}`);
       window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`, '_blank');
     };
 
@@ -454,14 +433,18 @@
     };
 
     async function loadDashboard(userId) {
-      const { data: profile, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
-      if (error || !profile) return toast('الحساب غير موجود', 'error');
+      const { data: profile, error } = await supabase.from('profiles').select('*').eq('id', userId).maybeSingle();
+      
+      if (error || !profile) {
+        await supabase.auth.signOut();
+        showScreen('welcomeScreen');
+        return;
+      }
 
       const now = new Date();
       const trialEnd = profile.trial_ends_at ? new Date(profile.trial_ends_at) : null;
       const subEnd = profile.subscription_ends_at ? new Date(profile.subscription_ends_at) : null;
       const isBlocked = profile.is_blocked === true;
-
       const isActive = !isBlocked && ((subEnd && subEnd > now) || (trialEnd && trialEnd > now));
 
       if (!isActive) {
@@ -471,6 +454,7 @@
 
       CURRENT_PROFILE = profile;
       document.getElementById('dashName').textContent = 'مرحباً ' + profile.full_name;
+      document.getElementById('dashRole').textContent = profile.role === 'teacher' ? '👨‍🏫 أستاذ' : '🎓 تلميذ';
       document.getElementById('shareCode').textContent = profile.share_code || '------';
       showScreen('dashboardScreen');
       loadTab('groups');
