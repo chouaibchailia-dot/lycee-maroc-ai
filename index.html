@@ -17,89 +17,95 @@
       --gradient: linear-gradient(135deg, #0F4C3A 0%, #1B5E20 40%, #B71C1C 100%);
       --gradient-btn: linear-gradient(135deg, #B71C1C 0%, #8B0000 100%);
     }
-    body.dark {
-      --bg: #0A0A0A; --card: #1A1A1A; --surface: #141414;
-      --text: #F5F5F5; --text-2: #B0B0B0; --text-3: #707070; --border: #2A2A2A;
-    }
+    body.dark { --bg:#0A0A0A; --card:#1A1A1A; --surface:#141414; --text:#F5F5F5; --text-2:#B0B0B0; --text-3:#707070; --border:#2A2A2A; }
     * { margin:0; padding:0; box-sizing:border-box; font-family:'Cairo',sans-serif; -webkit-tap-highlight-color:transparent; }
     body { background:var(--bg); color:var(--text); min-height:100vh; transition:0.3s; }
     .hidden { display:none !important; }
     .screen { min-height:100vh; padding:24px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
     .card { background:var(--card); padding:24px; border-radius:16px; box-shadow:0 10px 25px rgba(0,0,0,0.05); width:100%; max-width:420px; }
     .title { font-size:24px; font-weight:800; margin-bottom:20px; text-align:center; }
-    
     .splash { position:fixed; inset:0; background:var(--gradient); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999; gap:20px; }
     .splash img { width:130px; height:130px; border-radius:20px; object-fit:cover; box-shadow:0 15px 30px rgba(0,0,0,0.3); border:3px solid rgba(255,255,255,0.2); animation:pulse 2s infinite; }
     .splash h1 { color:white; font-size:30px; font-weight:800; }
     .splash p { color:rgba(255,255,255,0.9); font-size:15px; }
     @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
-    
     .input, .select { width:100%; padding:14px; margin-bottom:12px; border:2px solid var(--border); border-radius:10px; font-size:15px; outline:none; background:var(--card); color:var(--text); font-family:inherit; }
     .input:focus, .select:focus { border-color:var(--primary); }
     .label { display:block; font-size:13px; font-weight:700; color:var(--text-2); margin-bottom:6px; margin-top:6px; }
-    
     .btn { width:100%; padding:16px; border-radius:10px; font-size:16px; font-weight:700; cursor:pointer; border:none; transition:0.2s; font-family:inherit; display:flex; align-items:center; justify-content:center; gap:8px; }
     .btn-primary { background:var(--gradient-btn); color:white; }
     .btn-primary:disabled { opacity:0.6; cursor:not-allowed; }
     .btn-outline { background:transparent; color:var(--primary); border:2px solid var(--primary); }
     .btn-link { background:transparent; color:var(--primary); font-weight:600; border:none; text-decoration:underline; cursor:pointer; margin-top:10px; font-size:14px; }
-    
     .roles { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
     .role-btn { padding:14px; border:2px solid var(--border); border-radius:10px; background:var(--card); cursor:pointer; font-family:inherit; font-weight:700; font-size:14px; color:var(--text-2); display:flex; flex-direction:column; align-items:center; gap:6px; }
     .role-btn.selected { border-color:var(--primary); background:rgba(183,28,28,0.05); color:var(--primary); }
-    
     .credentials-box { background:rgba(249,168,37,0.1); border:2px dashed var(--gold); border-radius:12px; padding:18px; margin:12px 0; }
     .cred-item { text-align:center; margin-bottom:12px; padding-bottom:12px; border-bottom:1px dashed rgba(0,0,0,0.1); }
     .cred-item:last-child { margin:0; padding:0; border:none; }
     .cred-label { font-size:12px; color:var(--text-2); margin-bottom:4px; }
     .cred-value { font-size:20px; font-weight:800; color:var(--primary); font-family:'Courier New',monospace; word-break:break-all; }
     .warning { background:rgba(239,68,68,0.1); color:var(--error); padding:10px; border-radius:8px; font-size:13px; font-weight:600; text-align:center; }
-    
     #dashboardScreen { padding:0; justify-content:flex-start; }
     .dash-header { width:100%; padding:16px; background:var(--gradient-btn); color:white; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
     .dash-header h1 { font-size:18px; margin-bottom:2px; }
     .role-badge { background:rgba(255,255,255,0.2); padding:2px 10px; border-radius:20px; font-size:11px; display:inline-block; }
     .header-actions { display:flex; gap:6px; }
     .btn-icon { width:40px; height:40px; border-radius:10px; background:rgba(255,255,255,0.15); color:white; display:flex; align-items:center; justify-content:center; border:none; cursor:pointer; font-size:18px; }
-    
+    .back-inline { background:rgba(255,255,255,0.15); color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; font-family:inherit; font-size:14px; font-weight:700; }
     .dash-content { width:100%; max-width:800px; padding:16px; margin:0 auto; display:flex; flex-direction:column; gap:14px; }
-    
-    .ai-card { background:linear-gradient(135deg,#0F4C3A,#B71C1C); color:white; border-radius:14px; padding:20px; box-shadow:0 8px 24px rgba(0,0,0,0.15); }
-    .ai-card h3 { font-size:18px; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
-    .ai-card p { font-size:13px; opacity:0.95; }
-    
+    .ai-big-card { background:linear-gradient(135deg,#0F4C3A 0%,#1B5E20 30%,#B71C1C 100%); color:white; border-radius:18px; padding:28px 22px; text-align:center; cursor:pointer; box-shadow:0 12px 32px rgba(15,76,58,0.35); transition:0.2s; }
+    .ai-big-card:active { transform:scale(0.98); }
+    .ai-big-card .icon-big { font-size:64px; margin-bottom:12px; display:block; }
+    .ai-big-card h2 { font-size:24px; font-weight:800; margin-bottom:6px; }
+    .ai-big-card p { font-size:14px; opacity:0.95; }
     .share-card { background:linear-gradient(135deg,rgba(183,28,28,0.08),rgba(249,168,37,0.08)); border:2px dashed var(--gold); border-radius:14px; padding:16px; text-align:center; }
     .share-label { font-size:12px; color:var(--text-2); margin-bottom:6px; }
     .share-code { font-size:28px; font-weight:800; color:var(--primary); letter-spacing:5px; font-family:'Courier New',monospace; margin:8px 0; }
     .share-actions { display:flex; gap:8px; margin-top:8px; }
     .share-actions button { flex:1; padding:8px; font-size:13px; }
-    
-    .tabs-scroll { display:flex; gap:6px; overflow-x:auto; padding-bottom:4px; scrollbar-width:none; }
-    .tabs-scroll::-webkit-scrollbar { display:none; }
-    .tab-btn { white-space:nowrap; padding:10px 16px; border-radius:20px; background:var(--card); border:2px solid var(--border); color:var(--text-2); font-weight:700; font-size:14px; cursor:pointer; }
-    .tab-btn.active { background:var(--primary); border-color:var(--primary); color:white; }
-    
-    .tab-content-area { background:var(--card); border-radius:14px; padding:20px; min-height:200px; border:1px solid var(--border); }
+    .institution-card { background:var(--gradient-btn); color:white; border-radius:16px; padding:28px 20px; text-align:center; cursor:pointer; box-shadow:0 12px 32px rgba(183,28,28,0.3); transition:0.2s; }
+    .institution-card:active { transform:scale(0.98); }
+    .institution-card .icon-big { font-size:56px; margin-bottom:12px; display:block; }
+    .institution-card h2 { font-size:22px; font-weight:800; margin-bottom:6px; }
+    .institution-card p { font-size:13px; opacity:0.9; }
+    .section-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+    .section-icon-card { background:var(--card); border:2px solid var(--border); border-radius:14px; padding:24px 16px; text-align:center; cursor:pointer; transition:0.2s; }
+    .section-icon-card:active { transform:scale(0.97); border-color:var(--primary); }
+    .section-icon-card .icon-big { font-size:42px; margin-bottom:10px; display:block; }
+    .section-icon-card .label { font-weight:800; font-size:15px; color:var(--text); }
+    .ai-option-card { background:var(--card); border:2px solid var(--border); border-radius:14px; padding:20px; cursor:pointer; transition:0.2s; display:flex; align-items:center; gap:16px; }
+    .ai-option-card:active { transform:scale(0.98); border-color:var(--primary); }
+    .ai-option-card .icon-big { font-size:38px; }
+    .ai-option-card .ai-info { flex:1; }
+    .ai-option-card h3 { font-size:17px; font-weight:800; margin-bottom:4px; color:var(--text); }
+    .ai-option-card p { font-size:13px; color:var(--text-2); }
     .empty-state { text-align:center; padding:40px 20px; color:var(--text-2); }
     .empty-icon { font-size:40px; margin-bottom:10px; opacity:0.5; }
     .group-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
-    .group-card { background:var(--surface); border:2px solid var(--border); border-radius:12px; padding:16px; text-align:center; }
+    .group-card { background:var(--surface); border:2px solid var(--border); border-radius:12px; padding:16px; text-align:center; cursor:pointer; transition:0.2s; }
+    .group-card:active { transform:scale(0.97); border-color:var(--primary); }
     .group-card .icon { font-size:24px; margin-bottom:8px; }
     .group-card .name { font-weight:800; font-size:15px; }
     .group-card .count { font-size:12px; color:var(--text-2); margin-top:4px; }
-    
+    .student-row { display:flex; justify-content:space-between; align-items:center; padding:14px; background:var(--card); border:1px solid var(--border); border-radius:10px; margin-bottom:8px; }
+    .student-row strong { font-size:14px; }
+    .student-row small { font-size:12px; color:var(--text-2); }
+    .info-card { background:var(--card); border-radius:14px; padding:20px; border:1px solid var(--border); }
+    .info-row { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); font-size:14px; }
+    .info-row:last-child { border-bottom:none; }
+    .info-row span:first-child { color:var(--text-2); font-weight:600; }
+    .info-row span:last-child { font-weight:700; }
     .inactive-screen { text-align:center; padding:40px 20px; }
     .inactive-screen .icon { font-size:80px; margin-bottom:20px; }
     .inactive-screen h2 { color:var(--primary); font-size:26px; margin-bottom:12px; }
     .inactive-screen p { color:var(--text-2); margin-bottom:20px; }
     .inactive-screen a { display:block; padding:14px; border-radius:10px; text-decoration:none; font-weight:700; margin-bottom:10px; }
-    
     .toast { position:fixed; top:20px; left:50%; transform:translateX(-50%); padding:12px 20px; border-radius:8px; color:white; font-weight:700; font-size:14px; z-index:10000; text-align:center; width:90%; max-width:340px; box-shadow:0 4px 12px rgba(0,0,0,0.15); animation:slide 0.3s; }
     .toast.success { background:var(--success); }
     .toast.error { background:var(--error); }
     .toast.info { background:var(--info); }
     @keyframes slide { from { transform:translate(-50%,-20px); opacity:0; } to { transform:translate(-50%,0); opacity:1; } }
-    
     .loader-spin { display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,0.3); border-top-color:white; border-radius:50%; animation:spin 0.8s linear infinite; }
     @keyframes spin { to { transform:rotate(360deg); } }
   </style>
@@ -127,13 +133,11 @@
     <div class="card">
       <button class="btn-link" style="text-align:right; display:block; margin-bottom:12px; text-decoration:none;" onclick="showScreen('welcomeScreen')">← رجوع</button>
       <h2 class="title">إنشاء حساب جديد</h2>
-      
       <label class="label">اختر الدور *</label>
       <div class="roles">
         <button type="button" class="role-btn selected" data-role="teacher" onclick="selectRole('teacher', this)">👨‍🏫 أستاذ</button>
         <button type="button" class="role-btn" data-role="student" onclick="selectRole('student', this)">🎓 تلميذ</button>
       </div>
-      
       <input type="text" id="suName" class="input" placeholder="الاسم الكامل *">
       <label class="label">المادة *</label>
       <select id="suSubject" class="select">
@@ -203,38 +207,20 @@
 
   <div id="dashboardScreen" class="screen hidden">
     <div class="dash-header">
-      <div>
-        <h1 id="dashName">مرحباً</h1>
-        <span class="role-badge" id="dashRole">أستاذ</span>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button id="backBtnDash" class="back-inline hidden" onclick="goBack()">→ رجوع</button>
+        <div>
+          <h1 id="dashName">مرحباً</h1>
+          <span class="role-badge" id="dashRole">أستاذ</span>
+        </div>
       </div>
       <div class="header-actions">
+        <button class="btn-icon" onclick="openSettings()" title="الإعدادات">⚙️</button>
         <button class="btn-icon" onclick="toggleTheme()" id="themeBtn">🌙</button>
         <button class="btn-icon" onclick="logout()">🚪</button>
       </div>
     </div>
-    <div class="dash-content">
-      <div class="ai-card">
-        <h3>🤖 AI المساعد</h3>
-        <p>توليد الدروس، الامتحانات، والجذاذات — قريباً</p>
-      </div>
-      <div class="share-card">
-        <div class="share-label">🎟️ كود المشاركة ديالك</div>
-        <div class="share-code" id="shareCode">------</div>
-        <div class="share-actions">
-          <button class="btn btn-outline" onclick="copyShareCode()">📋 نسخ</button>
-          <button class="btn btn-outline" onclick="shareWhatsApp()">📤 مشاركة</button>
-        </div>
-      </div>
-      <div class="tabs-scroll">
-        <button class="tab-btn active" data-tab="groups" onclick="loadTab('groups', this)">📁 الأفواج</button>
-        <button class="tab-btn" data-tab="students" onclick="loadTab('students', this)">👥 التلاميذ</button>
-        <button class="tab-btn" data-tab="requests" onclick="loadTab('requests', this)">📥 الطلبات</button>
-        <button class="tab-btn" data-tab="lessons" onclick="loadTab('lessons', this)">📚 الدروس</button>
-        <button class="tab-btn" data-tab="messages" onclick="loadTab('messages', this)">💬 الرسائل</button>
-        <button class="tab-btn" data-tab="settings" onclick="loadTab('settings', this)">⚙️ الإعدادات</button>
-      </div>
-      <div id="tabContent" class="tab-content-area"></div>
-    </div>
+    <div class="dash-content" id="dashContent"></div>
   </div>
 
   <script type="module">
@@ -250,6 +236,8 @@
 
     let CURRENT_PROFILE = null;
     let selectedRole = 'teacher';
+    let CURRENT_VIEW = 'home';
+    let CURRENT_GROUP = null;
 
     window.showScreen = (id) => {
       ['welcomeScreen','signupScreen','credentialsScreen','loginScreen','forgotScreen','dashboardScreen','inactiveScreen'].forEach(s => {
@@ -394,12 +382,28 @@
       btn.innerHTML = '<span class="loader-spin"></span>...';
 
       try {
-        const { data: profile, error: profErr } = await supabase.from('profiles').select('email').eq('full_name', name).maybeSingle();
-        if (profErr || !profile || !profile.email) throw new Error('هاد الاسم ما كاينش');
+        const { data: matches, error: matchErr } = await supabase.rpc('find_all_emails_by_base_name', { p_name: name });
 
-        const { data, error } = await supabase.auth.signInWithPassword({ email: profile.email, password });
-        if (error) throw new Error('كلمة المرور غالطة');
-        await loadDashboard(data.user.id);
+        if (matchErr) {
+          console.error('RPC Error:', matchErr);
+          throw new Error('خطأ في الاتصال، حاول مرة أخرى');
+        }
+
+        if (!matches || matches.length === 0) {
+          throw new Error('هاد الاسم ما كاينش');
+        }
+
+        let loginSuccess = false;
+        for (const m of matches) {
+          const { data, error } = await supabase.auth.signInWithPassword({ email: m.email, password });
+          if (!error && data.user) {
+            await loadDashboard(data.user.id);
+            loginSuccess = true;
+            break;
+          }
+        }
+
+        if (!loginSuccess) throw new Error('كلمة المرور غالطة');
       } catch (err) {
         toast(err.message, 'error');
       } finally {
@@ -410,6 +414,9 @@
 
     window.logout = async () => {
       await supabase.auth.signOut();
+      CURRENT_PROFILE = null;
+      CURRENT_VIEW = 'home';
+      CURRENT_GROUP = null;
       showScreen('welcomeScreen');
       toast('✅ تم تسجيل الخروج', 'success');
     };
@@ -432,9 +439,269 @@
       window.open(`https://wa.me/?text=${msg}`, '_blank');
     };
 
+    function updateBackButton() {
+      const btn = document.getElementById('backBtnDash');
+      if (!btn) return;
+      if (CURRENT_VIEW === 'home') btn.classList.add('hidden');
+      else btn.classList.remove('hidden');
+    }
+
+    window.goBack = () => {
+      if (CURRENT_VIEW === 'home') return;
+      if (CURRENT_VIEW === 'institution') renderHome();
+      else if (CURRENT_VIEW === 'ai-options' || CURRENT_VIEW === 'ai-generate') renderHome();
+      else if (CURRENT_VIEW === 'settings') renderHome();
+      else if (CURRENT_VIEW === 'group-detail') renderGroups();
+      else if (['groups','students','requests','lessons','messages'].includes(CURRENT_VIEW)) renderInstitution();
+      else renderInstitution();
+    };
+
+    function renderHome() {
+      CURRENT_VIEW = 'home';
+      CURRENT_GROUP = null;
+      updateBackButton();
+
+      const c = document.getElementById('dashContent');
+      c.innerHTML = `
+        <div class="ai-big-card" onclick="renderAIOptions()">
+          <span class="icon-big">🤖</span>
+          <h2>المساعد الذكي</h2>
+          <p>توليد الجذاذات والدروس والفروض حسب المادة والمستوى</p>
+        </div>
+        <div class="share-card">
+          <div class="share-label">🎟️ كود المشاركة ديالك</div>
+          <div class="share-code" id="shareCode">------</div>
+          <div class="share-actions">
+            <button class="btn btn-outline" onclick="copyShareCode()">📋 نسخ</button>
+            <button class="btn btn-outline" onclick="shareWhatsApp()">📤 مشاركة</button>
+          </div>
+        </div>
+        <div class="institution-card" onclick="renderInstitution()">
+          <span class="icon-big">🏛️</span>
+          <h2>المؤسسة</h2>
+          <p>الأفواج · التلاميذ · الطلبات · الدروس · الرسائل</p>
+        </div>
+      `;
+      document.getElementById('shareCode').textContent = CURRENT_PROFILE.share_code || '------';
+    }
+
+    window.renderAIOptions = () => {
+      CURRENT_VIEW = 'ai-options';
+      CURRENT_GROUP = null;
+      updateBackButton();
+
+      const c = document.getElementById('dashContent');
+      c.innerHTML = `
+        <h2 style="text-align:center; font-weight:800; margin-bottom:8px;">🤖 المساعد الذكي</h2>
+        <p style="text-align:center; color:var(--text-2); font-size:13px; margin-bottom:12px;">المادة: ${CURRENT_PROFILE.subject || '-'} — المستوى: ${CURRENT_PROFILE.level || '-'}</p>
+        <div class="ai-option-card" onclick="renderGenerate('jadidha')">
+          <div class="icon-big">📝</div>
+          <div class="ai-info"><h3>توليد جذاذة</h3><p>جذاذة درس كاملة حسب المادة والمستوى</p></div>
+        </div>
+        <div class="ai-option-card" onclick="renderGenerate('dars')">
+          <div class="icon-big">📖</div>
+          <div class="ai-info"><h3>توليد درس</h3><p>شرح مفصل للموضوع المختار</p></div>
+        </div>
+        <div class="ai-option-card" onclick="renderGenerate('fard')">
+          <div class="icon-big">📄</div>
+          <div class="ai-info"><h3>توليد فرض</h3><p>فرض مع أسئلة حسب المستوى</p></div>
+        </div>
+      `;
+    };
+
+    window.renderGenerate = (type) => {
+      CURRENT_VIEW = 'ai-generate';
+      updateBackButton();
+
+      const titles = { jadidha: '📝 توليد جذاذة', dars: '📖 توليد درس', fard: '📄 توليد فرض' };
+      const placeholders = { jadidha: 'مثال: النهايات والاتصال', dars: 'مثال: الاشتقاق والتطبيقات', fard: 'مثال: المتتاليات العددية' };
+
+      const c = document.getElementById('dashContent');
+      c.innerHTML = `
+        <h2 style="text-align:center; font-weight:800; margin-bottom:12px;">${titles[type]}</h2>
+        <div class="info-card">
+          <label class="label">الموضوع</label>
+          <input type="text" id="aiTopic" class="input" placeholder="${placeholders[type]}">
+          <div class="info-row"><span>المادة</span><span>${CURRENT_PROFILE.subject || '-'}</span></div>
+          <div class="info-row"><span>المستوى</span><span>${CURRENT_PROFILE.level || '-'}</span></div>
+          <button class="btn btn-primary" onclick="toast('سيتم ربط الذكاء الاصطناعي قريباً', 'info')" style="margin-top:16px;">✨ توليد</button>
+        </div>
+      `;
+    };
+
+    window.renderInstitution = () => {
+      CURRENT_VIEW = 'institution';
+      CURRENT_GROUP = null;
+      updateBackButton();
+
+      const c = document.getElementById('dashContent');
+      c.innerHTML = `
+        <h2 style="text-align:center; font-weight:800; margin-bottom:12px;">🏛️ المؤسسة</h2>
+        <div class="section-grid">
+          <div class="section-icon-card" onclick="renderGroups()">
+            <span class="icon-big">📁</span>
+            <div class="label">الأفواج</div>
+          </div>
+          <div class="section-icon-card" onclick="renderStudents()">
+            <span class="icon-big">👥</span>
+            <div class="label">التلاميذ</div>
+          </div>
+          <div class="section-icon-card" onclick="renderRequests()">
+            <span class="icon-big">📥</span>
+            <div class="label">الطلبات</div>
+          </div>
+          <div class="section-icon-card" onclick="renderLessons()">
+            <span class="icon-big">📚</span>
+            <div class="label">الدروس</div>
+          </div>
+          <div class="section-icon-card" onclick="renderMessages()">
+            <span class="icon-big">💬</span>
+            <div class="label">الرسائل</div>
+          </div>
+        </div>
+      `;
+    };
+
+    window.renderGroups = async () => {
+      CURRENT_VIEW = 'groups';
+      CURRENT_GROUP = null;
+      updateBackButton();
+
+      const c = document.getElementById('dashContent');
+      c.innerHTML = '<div class="empty-state">جاري التحميل...</div>';
+
+      const { data: groups } = await supabase
+        .from('teacher_groups')
+        .select('*')
+        .eq('teacher_id', CURRENT_PROFILE.id)
+        .order('created_at');
+
+      if (!groups || groups.length === 0) {
+        c.innerHTML = '<div class="empty-state"><div class="empty-icon">📁</div>ما كاينش أفواج</div>';
+        return;
+      }
+
+      const { data: students } = await supabase
+        .from('teacher_students')
+        .select('group_name')
+        .eq('teacher_id', CURRENT_PROFILE.id)
+        .eq('is_active', true);
+
+      const counts = {};
+      (students || []).forEach(s => { counts[s.group_name] = (counts[s.group_name] || 0) + 1; });
+
+      c.innerHTML = `<div class="group-grid">
+        ${groups.map(g => `
+          <div class="group-card" onclick="openGroup('${g.name.replace(/'/g, "\\'")}')">
+            <div class="icon">📁</div>
+            <div class="name">${g.name}</div>
+            <div class="count">${counts[g.name] || 0} تلميذ</div>
+          </div>
+        `).join('')}
+      </div>`;
+    };
+
+    window.openGroup = async (groupName) => {
+      CURRENT_VIEW = 'group-detail';
+      CURRENT_GROUP = groupName;
+      updateBackButton();
+
+      const c = document.getElementById('dashContent');
+      c.innerHTML = '<div class="empty-state">جاري التحميل...</div>';
+
+      const { data: students } = await supabase
+        .from('teacher_students')
+        .select('*, profiles!student_id(*)')
+        .eq('teacher_id', CURRENT_PROFILE.id)
+        .eq('group_name', groupName)
+        .eq('is_active', true);
+
+      if (!students || students.length === 0) {
+        c.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">👥</div>
+            <p>ما كاينش تلاميذ فـ ${groupName}</p>
+            <small style="color:var(--text-3);">ملي كتقبل الطلبات، غادي يتزادو هنا</small>
+          </div>`;
+        return;
+      }
+
+      c.innerHTML = `
+        <h3 style="margin-bottom:12px; font-weight:800;">${groupName} — ${students.length} تلميذ</h3>
+        ${students.map(s => `
+          <div class="student-row">
+            <div><strong>${s.profiles?.full_name || 'بدون اسم'}</strong><br><small>${s.profiles?.email || ''}</small></div>
+          </div>
+        `).join('')}
+      `;
+    };
+
+    window.renderStudents = () => {
+      CURRENT_VIEW = 'students';
+      updateBackButton();
+      document.getElementById('dashContent').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">👥</div>
+          <p>ما كاينش تلاميذ دابا</p>
+          <small style="color:var(--text-3);">غادي يبانيو هنا ملي يقبلو الطلبات</small>
+        </div>`;
+    };
+
+    window.renderRequests = () => {
+      CURRENT_VIEW = 'requests';
+      updateBackButton();
+      document.getElementById('dashContent').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">📥</div>
+          <p>ما كاينش طلبات دابا</p>
+          <small style="color:var(--text-3);">التلاميذ كيصيفطو طلبات من التطبيق ديالهم</small>
+        </div>`;
+    };
+
+    window.renderLessons = () => {
+      CURRENT_VIEW = 'lessons';
+      updateBackButton();
+      document.getElementById('dashContent').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">📚</div>
+          <p>مازال AI ما تربطش</p>
+          <small style="color:var(--text-3);">قريباً: توليد الدروس والامتحانات</small>
+        </div>`;
+    };
+
+    window.renderMessages = () => {
+      CURRENT_VIEW = 'messages';
+      updateBackButton();
+      document.getElementById('dashContent').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">💬</div>
+          <p>ما كاينش رسائل دابا</p>
+        </div>`;
+    };
+
+    window.openSettings = () => {
+      CURRENT_VIEW = 'settings';
+      CURRENT_GROUP = null;
+      updateBackButton();
+
+      const c = document.getElementById('dashContent');
+      c.innerHTML = `
+        <h2 style="text-align:center; font-weight:800; margin-bottom:12px;">⚙️ الإعدادات</h2>
+        <div class="info-card">
+          <div class="info-row"><span>الاسم</span><span>${CURRENT_PROFILE.full_name}</span></div>
+          <div class="info-row"><span>الدور</span><span>${CURRENT_PROFILE.role === 'teacher' ? '👨‍🏫 أستاذ' : '🎓 تلميذ'}</span></div>
+          <div class="info-row"><span>المادة</span><span>${CURRENT_PROFILE.subject || '-'}</span></div>
+          <div class="info-row"><span>المستوى</span><span>${CURRENT_PROFILE.level || '-'}</span></div>
+          <div class="info-row"><span>الهاتف</span><span>${CURRENT_PROFILE.phone || '-'}</span></div>
+          <div class="info-row"><span>كود المشاركة</span><span>${CURRENT_PROFILE.share_code || '-'}</span></div>
+        </div>
+        <button class="btn btn-outline" onclick="toggleTheme()" style="margin-top:14px;">🌙 تبديل المظهر</button>
+      `;
+    };
+
     async function loadDashboard(userId) {
       const { data: profile, error } = await supabase.from('profiles').select('*').eq('id', userId).maybeSingle();
-      
+
       if (error || !profile) {
         await supabase.auth.signOut();
         showScreen('welcomeScreen');
@@ -455,69 +722,9 @@
       CURRENT_PROFILE = profile;
       document.getElementById('dashName').textContent = 'مرحباً ' + profile.full_name;
       document.getElementById('dashRole').textContent = profile.role === 'teacher' ? '👨‍🏫 أستاذ' : '🎓 تلميذ';
-      document.getElementById('shareCode').textContent = profile.share_code || '------';
       showScreen('dashboardScreen');
-      loadTab('groups');
+      renderHome();
     }
-
-    window.loadTab = async (tab, btn) => {
-      if (btn) {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-      }
-      
-      const c = document.getElementById('tabContent');
-      c.innerHTML = '<div class="empty-state">جاري التحميل...</div>';
-
-      if (tab === 'groups') {
-        const { data: groups } = await supabase
-          .from('teacher_groups')
-          .select('*')
-          .eq('teacher_id', CURRENT_PROFILE.id)
-          .order('created_at');
-        
-        if (!groups || groups.length === 0) {
-          c.innerHTML = '<div class="empty-state"><div class="empty-icon">📁</div>ما كاينش أفواج</div>';
-          return;
-        }
-
-        const { data: students } = await supabase
-          .from('teacher_students')
-          .select('group_name')
-          .eq('teacher_id', CURRENT_PROFILE.id)
-          .eq('is_active', true);
-
-        const counts = {};
-        (students || []).forEach(s => {
-          counts[s.group_name] = (counts[s.group_name] || 0) + 1;
-        });
-
-        c.innerHTML = `<div class="group-grid">
-          ${groups.map(g => `
-            <div class="group-card">
-              <div class="icon">📁</div>
-              <div class="name">${g.name}</div>
-              <div class="count">${counts[g.name] || 0} تلميذ</div>
-            </div>
-          `).join('')}
-        </div>`;
-      }
-      else if (tab === 'students') {
-        c.innerHTML = '<div class="empty-state"><div class="empty-icon">👥</div>ما كاينش تلاميذ دابا<br><small>غادي يبانيو هنا ملي يقبلو الطلبات</small></div>';
-      }
-      else if (tab === 'requests') {
-        c.innerHTML = '<div class="empty-state"><div class="empty-icon">📥</div>ما كاينش طلبات دابا<br><small>التلاميذ كيصيفطو طلبات من التطبيق ديالهم</small></div>';
-      }
-      else if (tab === 'lessons') {
-        c.innerHTML = '<div class="empty-state"><div class="empty-icon">📚</div>مازال AI ما تربطش<br><small>قريباً: توليد الدروس والامتحانات</small></div>';
-      }
-      else if (tab === 'messages') {
-        c.innerHTML = '<div class="empty-state"><div class="empty-icon">💬</div>ما كاينش رسائل دابا</div>';
-      }
-      else if (tab === 'settings') {
-        c.innerHTML = '<div class="empty-state"><div class="empty-icon">⚙️</div>الإعدادات قريباً</div>';
-      }
-    };
 
     async function checkSession() {
       const { data: { session } } = await supabase.auth.getSession();
@@ -532,7 +739,6 @@
       document.getElementById('splashScreen').classList.add('hidden');
       checkSession();
     }, 1500);
-
   </script>
 </body>
 </html>
