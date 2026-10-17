@@ -5,461 +5,550 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#B71C1C">
   <title>Lycée Maroc AI</title>
-  <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/jpeg" href="IMG_20261017_011706.jpg">
-  <link rel="apple-touch-icon" href="IMG_20261017_011706.jpg">
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* ═══ CSS 2027 - Professional Grade ═══ */
     :root {
-      --primary: #B71C1C; --primary-dark: #8B0000; --primary-light: #E53935;
-      --gold: #F9A825; --white: #FFFFFF; --bg: #FAFAFA; 
+      --primary: #B71C1C; --primary-dark: #8B0000;
+      --bg: #F5F5F7; --card: #FFFFFF; --surface: #FAFAFA;
       --text: #1A1A1A; --text-2: #6B6B6B; --text-3: #9E9E9E;
-      --border: #E8E8E8; --success: #10B981; --error: #EF4444;
-      --gradient-primary: linear-gradient(135deg, #B71C1C 0%, #8B0000 100%);
-      --gradient-hero: linear-gradient(135deg, #0F4C3A 0%, #B71C1C 100%);
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06); --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-      --shadow-lg: 0 12px 32px rgba(0,0,0,0.12); --shadow-red: 0 8px 24px rgba(183,28,28,0.25);
-      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-xl: 24px;
-      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      --font-ar: 'Cairo', sans-serif; --font-fr: 'Inter', sans-serif;
+      --border: #E8E8E8; --gold: #F9A825;
+      --success: #10B981; --error: #EF4444; --info: #3B82F6;
+      --gradient: linear-gradient(135deg, #0F4C3A 0%, #1B5E20 40%, #B71C1C 100%);
+      --gradient-btn: linear-gradient(135deg, #B71C1C 0%, #8B0000 100%);
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: var(--font-ar); background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
-    .hidden { display: none !important; }
+    body.dark {
+      --bg: #0A0A0A; --card: #1A1A1A; --surface: #141414;
+      --text: #F5F5F5; --text-2: #B0B0B0; --text-3: #707070; --border: #2A2A2A;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Cairo',sans-serif; -webkit-tap-highlight-color:transparent; }
+    body { background:var(--bg); color:var(--text); min-height:100vh; transition:0.3s; }
+    .hidden { display:none !important; }
+    .screen { min-height:100vh; padding:24px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .card { background:var(--card); padding:24px; border-radius:16px; box-shadow:0 10px 25px rgba(0,0,0,0.05); width:100%; max-width:420px; }
+    .title { font-size:24px; font-weight:800; margin-bottom:20px; text-align:center; }
     
-    .screen { min-height: 100vh; padding: 32px 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; animation: fadeIn 0.4s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    .btn-primary, .btn-outline { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px 24px; border-radius: var(--radius-md); font-size: 15px; font-weight: 700; width: 100%; border: 2px solid transparent; cursor: pointer; transition: var(--transition); }
-    .btn-primary { background: var(--gradient-primary); color: var(--white); box-shadow: var(--shadow-red); }
-    .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(183,28,28,0.35); }
-    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-outline { background: var(--white); color: var(--primary); border-color: var(--primary); }
-    .btn-outline:hover { background: var(--primary); color: var(--white); transform: translateY(-2px); }
+    .splash { position:fixed; inset:0; background:var(--gradient); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999; gap:20px; }
+    .splash img { width:130px; height:130px; border-radius:20px; object-fit:cover; box-shadow:0 15px 30px rgba(0,0,0,0.3); border:3px solid rgba(255,255,255,0.2); animation:pulse 2s infinite; }
+    .splash h1 { color:white; font-size:30px; font-weight:800; }
+    .splash p { color:rgba(255,255,255,0.9); font-size:15px; }
+    @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
     
-    .splash { position: fixed; inset: 0; background: var(--gradient-hero); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; gap: 24px; }
-    .splash-logo-wrapper { width: 140px; height: 140px; border-radius: var(--radius-xl); background: rgba(255,255,255,0.1); padding: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: float 3s infinite; }
-    .splash-logo { width: 100%; height: 100%; border-radius: var(--radius-lg); object-fit: cover; }
-    .splash-title { font-family: var(--font-fr); font-size: 32px; font-weight: 800; color: var(--white); }
-    .splash-subtitle { color: rgba(255,255,255,0.85); font-size: 15px; }
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-    .welcome-logo-wrapper { width: 120px; height: 120px; border-radius: var(--radius-xl); padding: 8px; background: var(--white); box-shadow: var(--shadow-lg); margin-bottom: 12px; }
-    .welcome-logo { width: 100%; height: 100%; border-radius: var(--radius-lg); object-fit: cover; }
-    .welcome-title { font-family: var(--font-fr); font-size: 30px; font-weight: 800; margin-bottom: 8px; }
-    .welcome-subtitle { color: var(--text-2); font-size: 15px; margin-bottom: 24px; }
-
-    .auth-form { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 14px; }
-    .input-wrapper input, .select { width: 100%; padding: 16px; border: 2px solid var(--border); border-radius: var(--radius-md); font-size: 15px; outline: none; background: var(--white); font-family: inherit; }
-    .input-wrapper input:focus, .select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(183,28,28,0.1); }
-    .label { display: block; font-size: 13px; font-weight: 700; color: var(--text-2); margin: 8px 0 6px; }
-    .roles { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 8px; margin-bottom: 12px; }
-    .role-btn { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 6px; border: 2px solid var(--border); border-radius: var(--radius-md); background: var(--white); cursor: pointer; transition: var(--transition); color: var(--text-2); font-weight: 700; font-size: 12px; }
-    .role-btn.selected { border-color: var(--primary); background: rgba(183,28,28,0.05); color: var(--primary); }
-
-    #dashboardScreen { justify-content: flex-start; padding: 0; background: var(--bg); }
-    .dash-header { width: 100%; padding: 20px 24px; background: var(--gradient-primary); color: var(--white); display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-md); position: sticky; top: 0; z-index: 100; }
-    .header-actions { display: flex; gap: 8px; }
-    .btn-icon { width: 42px; height: 42px; border-radius: var(--radius-md); background: rgba(255,255,255,0.15); color: var(--white); display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; transition: var(--transition); }
-    .btn-icon:hover { background: rgba(255,255,255,0.25); }
-    #dashContent { width: 100%; max-width: 800px; padding: 20px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
-    .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-sm); }
-    .ai-card { background: linear-gradient(135deg, #0F4C3A, #B71C1C); color: var(--white); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-lg); }
-
-    .tabs-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
-    .tabs-scroll::-webkit-scrollbar { display: none; }
-    .tab-btn { white-space: nowrap; padding: 10px 16px; border-radius: 20px; background: var(--white); border: 2px solid var(--border); color: var(--text-2); font-weight: 700; cursor: pointer; transition: var(--transition); }
-    .tab-btn.active { background: var(--primary); border-color: var(--primary); color: var(--white); box-shadow: var(--shadow-red); }
-
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
-    .group-card { background: var(--white); border: 2px solid var(--border); border-radius: var(--radius-md); padding: 16px; text-align: center; transition: var(--transition); cursor: pointer; }
-    .group-card:hover { border-color: var(--primary); box-shadow: var(--shadow-md); transform: translateY(-2px); }
-    .group-title { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
-
-    .student-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 8px; cursor: pointer; }
-    .student-row:hover { border-color: var(--primary); }
-
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-    .modal-overlay.active { opacity: 1; pointer-events: auto; }
-    .modal-content { background: var(--white); width: 90%; max-width: 500px; border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-lg); max-height: 90vh; overflow-y: auto; transform: scale(0.95); transition: transform 0.3s; }
-    .modal-overlay.active .modal-content { transform: scale(1); }
+    .input, .select { width:100%; padding:14px; margin-bottom:12px; border:2px solid var(--border); border-radius:10px; font-size:15px; outline:none; background:var(--card); color:var(--text); font-family:inherit; }
+    .input:focus, .select:focus { border-color:var(--primary); }
+    .label { display:block; font-size:13px; font-weight:700; color:var(--text-2); margin-bottom:6px; margin-top:6px; }
     
-    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 14px 22px; background: var(--text); color: var(--white); border-radius: var(--radius-md); font-weight: 700; z-index: 10000; animation: slideUp 0.3s; text-align: center; max-width: 90vw; box-shadow: var(--shadow-lg); }
-    .toast.success { background: var(--success); } .toast.error { background: var(--error); }
-    @keyframes slideUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+    .btn { width:100%; padding:16px; border-radius:10px; font-size:16px; font-weight:700; cursor:pointer; border:none; transition:0.2s; font-family:inherit; display:flex; align-items:center; justify-content:center; gap:8px; }
+    .btn-primary { background:var(--gradient-btn); color:white; }
+    .btn-primary:disabled { opacity:0.6; cursor:not-allowed; }
+    .btn-outline { background:transparent; color:var(--primary); border:2px solid var(--primary); }
+    .btn-link { background:transparent; color:var(--primary); font-weight:600; border:none; text-decoration:underline; cursor:pointer; margin-top:10px; font-size:14px; }
+    
+    .credentials-box { background:rgba(249,168,37,0.1); border:2px dashed var(--gold); border-radius:12px; padding:18px; margin:12px 0; }
+    .cred-item { text-align:center; margin-bottom:12px; padding-bottom:12px; border-bottom:1px dashed rgba(0,0,0,0.1); }
+    .cred-item:last-child { margin:0; padding:0; border:none; }
+    .cred-label { font-size:12px; color:var(--text-2); margin-bottom:4px; }
+    .cred-value { font-size:20px; font-weight:800; color:var(--primary); font-family:'Courier New',monospace; word-break:break-all; }
+    .warning { background:rgba(239,68,68,0.1); color:var(--error); padding:10px; border-radius:8px; font-size:13px; font-weight:600; text-align:center; }
+    
+    #dashboardScreen { padding:0; justify-content:flex-start; }
+    .dash-header { width:100%; padding:16px; background:var(--gradient-btn); color:white; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+    .dash-header h1 { font-size:18px; margin-bottom:2px; }
+    .role-badge { background:rgba(255,255,255,0.2); padding:2px 10px; border-radius:20px; font-size:11px; display:inline-block; }
+    .header-actions { display:flex; gap:6px; }
+    .btn-icon { width:40px; height:40px; border-radius:10px; background:rgba(255,255,255,0.15); color:white; display:flex; align-items:center; justify-content:center; border:none; cursor:pointer; font-size:18px; }
+    
+    .dash-content { width:100%; max-width:800px; padding:16px; margin:0 auto; display:flex; flex-direction:column; gap:14px; }
+    
+    .ai-card { background:linear-gradient(135deg,#0F4C3A,#B71C1C); color:white; border-radius:14px; padding:20px; box-shadow:0 8px 24px rgba(0,0,0,0.15); }
+    .ai-card h3 { font-size:18px; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+    .ai-card p { font-size:13px; opacity:0.95; }
+    
+    .share-card { background:linear-gradient(135deg,rgba(183,28,28,0.08),rgba(249,168,37,0.08)); border:2px dashed var(--gold); border-radius:14px; padding:16px; text-align:center; }
+    .share-label { font-size:12px; color:var(--text-2); margin-bottom:6px; }
+    .share-code { font-size:28px; font-weight:800; color:var(--primary); letter-spacing:5px; font-family:'Courier New',monospace; margin:8px 0; }
+    .share-actions { display:flex; gap:8px; margin-top:8px; }
+    .share-actions button { flex:1; padding:8px; font-size:13px; }
+    
+    .tabs-scroll { display:flex; gap:6px; overflow-x:auto; padding-bottom:4px; scrollbar-width:none; }
+    .tabs-scroll::-webkit-scrollbar { display:none; }
+    .tab-btn { white-space:nowrap; padding:10px 16px; border-radius:20px; background:var(--card); border:2px solid var(--border); color:var(--text-2); font-weight:700; font-size:14px; cursor:pointer; }
+    .tab-btn.active { background:var(--primary); border-color:var(--primary); color:white; }
+    
+    .tab-content-area { background:var(--card); border-radius:14px; padding:20px; min-height:200px; border:1px solid var(--border); }
+    .empty-state { text-align:center; padding:40px 20px; color:var(--text-2); }
+    .empty-icon { font-size:40px; margin-bottom:10px; opacity:0.5; }
+    .group-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+    .group-card { background:var(--surface); border:2px solid var(--border); border-radius:12px; padding:16px; text-align:center; }
+    .group-card .icon { font-size:24px; margin-bottom:8px; }
+    .group-card .name { font-weight:800; font-size:15px; }
+    .group-card .count { font-size:12px; color:var(--text-2); margin-top:4px; }
+    
+    .inactive-screen { text-align:center; padding:40px 20px; }
+    .inactive-screen .icon { font-size:80px; margin-bottom:20px; }
+    .inactive-screen h2 { color:var(--primary); font-size:26px; margin-bottom:12px; }
+    .inactive-screen p { color:var(--text-2); margin-bottom:20px; }
+    .inactive-screen a { display:block; padding:14px; border-radius:10px; text-decoration:none; font-weight:700; margin-bottom:10px; }
+    
+    .toast { position:fixed; top:20px; left:50%; transform:translateX(-50%); padding:12px 20px; border-radius:8px; color:white; font-weight:700; font-size:14px; z-index:10000; text-align:center; width:90%; max-width:340px; box-shadow:0 4px 12px rgba(0,0,0,0.15); animation:slide 0.3s; }
+    .toast.success { background:var(--success); }
+    .toast.error { background:var(--error); }
+    .toast.info { background:var(--info); }
+    @keyframes slide { from { transform:translate(-50%,-20px); opacity:0; } to { transform:translate(-50%,0); opacity:1; } }
+    
+    .loader-spin { display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,0.3); border-top-color:white; border-radius:50%; animation:spin 0.8s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
   </style>
 </head>
 <body>
 
-  <div id="splash" class="splash">
-    <div class="splash-logo-wrapper"><img src="IMG_20261017_011706.jpg" class="splash-logo" alt="Logo"></div>
-    <h1 class="splash-title">Lycée Maroc AI</h1>
-    <p class="splash-subtitle">الأستاذ المغربي الذكي</p>
+  <div id="splashScreen" class="splash">
+    <img src="IMG_20261017_011706.jpg" alt="Logo">
+    <h1>Lycée Maroc AI</h1>
+    <p>الأستاذ المغربي الذكي</p>
   </div>
 
   <div id="welcomeScreen" class="screen hidden">
-    <div class="welcome-logo-wrapper"><img src="IMG_20261017_011706.jpg" class="welcome-logo" alt="Logo"></div>
-    <h1 class="welcome-title">Lycée Maroc AI</h1>
-    <p class="welcome-subtitle">الأستاذ المغربي الذكي</p>
-    <div style="width:100%; max-width:340px; display:flex; flex-direction:column; gap:12px;">
-      <button id="goLogin" class="btn-primary">تسجيل الدخول</button>
-      <button id="goSignup" class="btn-outline">إنشاء حساب جديد</button>
+    <img src="IMG_20261017_011706.jpg" style="width:100px; height:100px; border-radius:20px; margin-bottom:20px; object-fit:cover;">
+    <h1 style="font-size:26px; font-weight:800; margin-bottom:5px;">Lycée Maroc AI</h1>
+    <p style="color:var(--text-2); margin-bottom:30px;">الأستاذ المغربي الذكي</p>
+    <div style="width:100%; max-width:320px; display:flex; flex-direction:column; gap:12px;">
+      <button class="btn btn-primary" onclick="showScreen('loginScreen')">تسجيل الدخول</button>
+      <button class="btn btn-outline" onclick="showScreen('signupScreen')">إنشاء حساب جديد</button>
+      <button class="btn-link" onclick="showScreen('forgotScreen')">نسيت كلمة المرور؟</button>
     </div>
   </div>
 
-  <div id="authScreen" class="screen hidden">
-    <button id="backBtn" style="align-self:flex-start; border:none; background:none; margin-bottom:20px; cursor:pointer; font-weight:bold;">← رجوع</button>
-    <h2 id="authTitle" style="font-size:26px; font-weight:800; margin-bottom:20px;">إنشاء حساب جديد</h2>
+  <div id="signupScreen" class="screen hidden">
+    <div class="card">
+      <button class="btn-link" style="text-align:right; display:block; margin-bottom:12px; text-decoration:none;" onclick="showScreen('welcomeScreen')">← رجوع</button>
+      <h2 class="title">إنشاء حساب جديد</h2>
+      <input type="text" id="suName" class="input" placeholder="الاسم الكامل *">
+      <label class="label">المادة *</label>
+      <select id="suSubject" class="select">
+        <option value="">اختر المادة...</option>
+        <option>الرياضيات</option><option>الفيزياء والكيمياء</option><option>اللغة العربية</option>
+        <option>اللغة الفرنسية</option><option>اللغة الإنجليزية</option><option>علوم الحياة والأرض</option>
+        <option>التاريخ والجغرافيا</option><option>التربية الإسلامية</option><option>الفلسفة</option>
+        <option>الاقتصاد</option><option>المحاسبة</option><option>المعلوميات</option>
+      </select>
+      <label class="label">المستوى *</label>
+      <select id="suLevel" class="select">
+        <option value="">اختر المستوى...</option>
+        <option>السابعة</option><option>الثامنة</option><option>التاسعة</option>
+        <option>الجذع المشترك</option><option>الأولى باك</option><option>الثانية باك</option>
+      </select>
+      <input type="tel" id="suPhone" class="input" placeholder="رقم الهاتف (اختياري)" maxlength="10">
+      <input type="password" id="suPassword" class="input" placeholder="كلمة المرور * (6 أحرف على الأقل)">
+      <button class="btn btn-primary" id="signupBtn" onclick="doSignup()" style="margin-top:10px;">إنشاء الحساب</button>
+    </div>
+  </div>
 
-    <form id="signupForm" class="auth-form" novalidate>
-      <div class="roles">
-        <button type="button" class="role-btn" data-role="teacher">أستاذ</button>
-        <button type="button" class="role-btn" data-role="student">تلميذ</button>
-        <button type="button" class="role-btn" data-role="parent">ولي أمر</button>
-        <button type="button" class="role-btn" data-role="guard">حارس</button>
-        <button type="button" class="role-btn" data-role="director">مدير</button>
+  <div id="credentialsScreen" class="screen hidden">
+    <div class="card">
+      <h2 class="title" style="color:var(--success);">✅ تم إنشاء الحساب</h2>
+      <p style="text-align:center; color:var(--text-2); font-size:13px; margin-bottom:10px;">احفظ هاد المعلومات مزيان</p>
+      <div class="credentials-box">
+        <div class="cred-item"><div class="cred-label">🎟️ رقم الدخول</div><div class="cred-value" id="genNumber">----------</div></div>
+        <div class="cred-item"><div class="cred-label">🔒 كلمة المرور</div><div class="cred-value" id="genPassword">----------</div></div>
+        <div class="cred-item"><div class="cred-label">🆔 اسمك</div><div class="cred-value" id="genName" style="font-size:15px;">----------</div></div>
+        <div class="cred-item"><div class="cred-label">🎟️ كود المشاركة</div><div class="cred-value" id="genShareCode">----------</div></div>
       </div>
-      <input type="text" id="suName" placeholder="الاسم الكامل" required>
-      <input type="email" id="suEmail" placeholder="البريد الإلكتروني" required>
-      <input type="tel" id="suPhone" placeholder="06XXXXXXXX" maxlength="10">
-      <input type="password" id="suPassword" placeholder="كلمة المرور (8 أحرف)" required minlength="8">
-      
-      <div id="teacherFields" class="hidden">
-        <select id="suSubject" class="select"><option value="">المادة...</option><option>الرياضيات</option><option>الفيزياء</option><option>اللغة العربية</option><option>الفرنسية</option><option>الإنجليزية</option></select>
-        <select id="suLevel" class="select" style="margin-top:10px;"><option value="">المستوى...</option><option>الأولى باك</option><option>الثانية باك</option><option>الجذع المشترك</option></select>
-        <input type="text" id="suSchool" placeholder="اسم الثانوية" class="select" style="margin-top:10px;">
-      </div>
+      <div class="warning">⚠️ إلا نسيت كلمة المرور، تواصل مع الإدارة</div>
+      <button class="btn btn-outline" onclick="copyAll()" style="margin-top:12px;">📋 نسخ كلشي</button>
+      <button class="btn btn-primary" onclick="showScreen('loginScreen')" style="margin-top:8px;">✅ متابعة للدخول</button>
+    </div>
+  </div>
 
-      <button type="submit" class="btn-primary" id="signupBtn" disabled>إنشاء حسابي</button>
-    </form>
+  <div id="loginScreen" class="screen hidden">
+    <div class="card">
+      <button class="btn-link" style="text-align:right; display:block; margin-bottom:12px; text-decoration:none;" onclick="showScreen('welcomeScreen')">← رجوع</button>
+      <h2 class="title">تسجيل الدخول</h2>
+      <input type="tel" id="loginNumber" class="input" placeholder="رقم الدخول (10 أرقام)" maxlength="10" inputmode="numeric">
+      <input type="password" id="loginPassword" class="input" placeholder="كلمة المرور">
+      <button class="btn btn-primary" id="loginBtn" onclick="doLogin()" style="margin-top:10px;">دخول</button>
+      <button class="btn-link" onclick="showScreen('forgotScreen')" style="display:block; margin:12px auto 0;">نسيت كلمة المرور؟</button>
+    </div>
+  </div>
 
-    <form id="loginForm" class="auth-form hidden">
-      <input type="email" id="loginEmail" placeholder="البريد الإلكتروني" required>
-      <input type="password" id="loginPassword" placeholder="كلمة المرور" required>
-      <button type="submit" class="btn-primary">دخول</button>
-    </form>
+  <div id="forgotScreen" class="screen hidden">
+    <div class="card">
+      <button class="btn-link" style="text-align:right; display:block; margin-bottom:12px; text-decoration:none;" onclick="showScreen('welcomeScreen')">← رجوع</button>
+      <h2 class="title">🔑 نسيت كلمة المرور</h2>
+      <p style="text-align:center; color:var(--text-2); font-size:13px; margin-bottom:12px;">دخل الاسم أو رقم الدخول ديالك</p>
+      <input type="text" id="forgotInput" class="input" placeholder="الاسم أو رقم الدخول">
+      <button class="btn btn-primary" onclick="sendWhatsApp()" style="margin-top:10px;">📱 تواصل على واتساب</button>
+    </div>
+  </div>
+
+  <div id="inactiveScreen" class="screen hidden">
+    <div class="inactive-screen">
+      <div class="icon">⏸️</div>
+      <h2>الحساب غير نشط</h2>
+      <p>للحصول على المساعدة، تواصل مع الدعم</p>
+      <a href="mailto:chouaibchailia@gmail.com" class="btn-primary">📧 إيميل</a>
+      <a href="https://wa.me/212600000000" class="btn-outline">📱 واتساب</a>
+    </div>
   </div>
 
   <div id="dashboardScreen" class="screen hidden">
     <div class="dash-header">
       <div>
-        <h1 id="dashGreeting" style="font-size:20px; margin-bottom:4px;">مرحباً</h1>
-        <p id="dashRole" style="background:rgba(255,255,255,0.2); padding:2px 10px; border-radius:20px; font-size:12px; display:inline-block;"></p>
+        <h1 id="dashName">مرحباً</h1>
+        <span class="role-badge">أستاذ</span>
       </div>
       <div class="header-actions">
-        <button id="logoutBtn" class="btn-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        </button>
+        <button class="btn-icon" onclick="toggleTheme()" id="themeBtn">🌙</button>
+        <button class="btn-icon" onclick="logout()">🚪</button>
       </div>
     </div>
-    <div id="dashContent"></div>
-  </div>
-
-  <div id="modalOverlay" class="modal-overlay">
-    <div id="modalContent" class="modal-content"></div>
+    <div class="dash-content">
+      <div class="ai-card">
+        <h3>🤖 AI المساعد</h3>
+        <p>توليد الدروس، الامتحانات، والجذاذات — قريباً</p>
+      </div>
+      <div class="share-card">
+        <div class="share-label">🎟️ كود المشاركة ديالك</div>
+        <div class="share-code" id="shareCode">------</div>
+        <div class="share-actions">
+          <button class="btn btn-outline" onclick="copyShareCode()">📋 نسخ</button>
+          <button class="btn btn-outline" onclick="shareWhatsApp()">📤 مشاركة</button>
+        </div>
+      </div>
+      <div class="tabs-scroll">
+        <button class="tab-btn active" data-tab="groups" onclick="loadTab('groups', this)">📁 الأفواج</button>
+        <button class="tab-btn" data-tab="students" onclick="loadTab('students', this)">👥 التلاميذ</button>
+        <button class="tab-btn" data-tab="requests" onclick="loadTab('requests', this)">📥 الطلبات</button>
+        <button class="tab-btn" data-tab="lessons" onclick="loadTab('lessons', this)">📚 الدروس</button>
+        <button class="tab-btn" data-tab="messages" onclick="loadTab('messages', this)">💬 الرسائل</button>
+        <button class="tab-btn" data-tab="settings" onclick="loadTab('settings', this)">⚙️ الإعدادات</button>
+      </div>
+      <div id="tabContent" class="tab-content-area"></div>
+    </div>
   </div>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-    const supabase = createClient('https://mcjumnvjgehqnojhfuga.supabase.co', 'sb_publishable_7pH_7UmCE7qNbYa2pQlrQg_lCJ5BcU3');
-    
-    const $ = (id) => document.getElementById(id);
-    const show = (el) => { if(el) el.classList.remove('hidden'); };
-    const hide = (el) => { if(el) el.classList.add('hidden'); };
-    
-    let currentUser = null, currentProfile = null, selectedRole = null;
+    const supabase = createClient(
+      'https://mcjumnvjgehqnojhfuga.supabase.co',
+      'sb_publishable_7pH_7UmCE7qNbYa2pQlrQg_lCJ5BcU3',
+      { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }
+    );
 
-    function toast(msg, type='info') {
-      const t = document.createElement('div'); t.className = `toast ${type}`; t.textContent = msg;
-      document.body.appendChild(t); setTimeout(() => t.remove(), 3000);
+    const ADMIN_WA = '212600000000';
+    const FAKE_DOMAIN = '@lycee-maroc.ai';
+    const FINGERPRINT_ENABLED = false;
+
+    let CURRENT_PROFILE = null;
+
+    window.showScreen = (id) => {
+      ['welcomeScreen','signupScreen','credentialsScreen','loginScreen','forgotScreen','dashboardScreen','inactiveScreen'].forEach(s => {
+        const el = document.getElementById(s);
+        if (el) el.classList.add('hidden');
+      });
+      document.getElementById(id).classList.remove('hidden');
+    };
+
+    window.toast = (msg, type='info') => {
+      const t = document.createElement('div');
+      t.className = `toast ${type}`;
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 3500);
+    };
+
+    window.toggleTheme = () => {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+    };
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+      setTimeout(() => document.getElementById('themeBtn').textContent = '☀️', 100);
     }
 
-    // UI Setup
-    setTimeout(() => { hide($('splash')); show($('welcomeScreen')); }, 1500);
-    $('goLogin').onclick = () => { hide($('welcomeScreen')); show($('authScreen')); hide($('signupForm')); show($('loginForm')); $('authTitle').textContent = 'تسجيل الدخول'; };
-    $('goSignup').onclick = () => { hide($('welcomeScreen')); show($('authScreen')); show($('signupForm')); hide($('loginForm')); $('authTitle').textContent = 'إنشاء حساب جديد'; };
-    $('backBtn').onclick = () => { hide($('authScreen')); show($('welcomeScreen')); };
-    
-    document.querySelectorAll('.role-btn').forEach(b => {
-      b.onclick = () => {
-        document.querySelectorAll('.role-btn').forEach(x => x.classList.remove('selected'));
-        b.classList.add('selected'); selectedRole = b.dataset.role; $('signupBtn').disabled = false;
-        hide($('teacherFields')); if(selectedRole === 'teacher') show($('teacherFields'));
-      };
-    });
+    async function getFingerprint() {
+      const str = navigator.userAgent + screen.width + screen.height + navigator.language + (navigator.hardwareConcurrency || 0);
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
 
-    // Auth
-    $('signupForm').onsubmit = async (e) => {
-      e.preventDefault();
-      const email = $('suEmail').value.trim().toLowerCase();
-      $('signupBtn').textContent = '...';
-      
-      const { data: auth, error } = await supabase.auth.signUp({ email, password: $('suPassword').value });
-      if (error) { toast(error.message, 'error'); $('signupBtn').textContent='إنشاء حسابي'; return; }
+    async function genUniqueNumber() {
+      for (let i = 0; i < 30; i++) {
+        let num = '18';
+        for (let j = 0; j < 8; j++) num += Math.floor(Math.random() * 10);
+        const { data } = await supabase.from('profiles').select('id').eq('login_number', num).maybeSingle();
+        if (!data) return num;
+      }
+      throw new Error('فشل توليد رقم');
+    }
 
-      // استعمال الدالة generate_share_code و generate_parent_code اللي كاينين فـ Supabase
-      await supabase.from('profiles').insert({
-        id: auth.user.id, role: selectedRole, full_name: $('suName').value, email, phone: $('suPhone').value,
-        subject: $('suSubject')?.value || null, level: $('suLevel')?.value || null, institution: $('suSchool')?.value || null,
-        is_active: true
-      });
+    async function genShareCode() {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      for (let i = 0; i < 30; i++) {
+        let s = '';
+        for (let j = 0; j < 6; j++) s += chars[Math.floor(Math.random() * chars.length)];
+        const { data } = await supabase.from('profiles').select('id').eq('share_code', s).maybeSingle();
+        if (!data) return s;
+      }
+      throw new Error('فشل توليد كود');
+    }
 
-      toast('✅ تم التسجيل'); loadDashboard(auth.user.id);
+    async function getUniqueName(baseName) {
+      const { data } = await supabase.from('profiles').select('id').eq('full_name', baseName).maybeSingle();
+      if (!data) return baseName;
+      let counter = 2;
+      while (counter < 100) {
+        const candidate = `${baseName} ${counter}`;
+        const { data: check } = await supabase.from('profiles').select('id').eq('full_name', candidate).maybeSingle();
+        if (!check) return candidate;
+        counter++;
+      }
+      throw new Error('فشل توليد اسم');
+    }
+
+    window.doSignup = async () => {
+      const name = document.getElementById('suName').value.trim();
+      const subject = document.getElementById('suSubject').value;
+      const level = document.getElementById('suLevel').value;
+      const phone = document.getElementById('suPhone').value.trim();
+      const password = document.getElementById('suPassword').value;
+
+      if (!name || name.length < 3) return toast('دخل الاسم (3 أحرف على الأقل)', 'error');
+      if (!subject) return toast('اختر المادة', 'error');
+      if (!level) return toast('اختر المستوى', 'error');
+      if (!password || password.length < 6) return toast('كلمة المرور قصيرة (6 أحرف على الأقل)', 'error');
+
+      const btn = document.getElementById('signupBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loader-spin"></span> جاري التسجيل...';
+
+      try {
+        const { data: passCheck } = await supabase.from('profiles').select('id').eq('plain_password', password).maybeSingle();
+        if (passCheck) throw new Error('كلمة المرور مستعملة، جرب وحدة أخرى');
+
+        if (phone) {
+          if (!/^[0-9]{10}$/.test(phone)) throw new Error('الهاتف خاصو 10 أرقام');
+          const { data: phoneCheck } = await supabase.from('profiles').select('id').eq('phone', phone).maybeSingle();
+          if (phoneCheck) throw new Error('هاد الهاتف مستعمل');
+        }
+
+        const fp = await getFingerprint();
+        if (FINGERPRINT_ENABLED) {
+          const { data: fpCheck } = await supabase.from('trials').select('ends_at').eq('fingerprint', fp).order('started_at', { ascending: false }).limit(1).maybeSingle();
+          if (fpCheck && new Date(fpCheck.ends_at) > new Date()) {
+            throw new Error('هاد الهاتف سبق استافد من التجربة المجانية');
+          }
+        }
+
+        const uniqueName = await getUniqueName(name);
+        const loginNumber = await genUniqueNumber();
+        const shareCode = await genShareCode();
+
+        const fakeEmail = `${loginNumber}${FAKE_DOMAIN}`;
+        const { data: auth, error: authErr } = await supabase.auth.signUp({ email: fakeEmail, password });
+        if (authErr) throw authErr;
+
+        const { error: profErr } = await supabase.from('profiles').insert({
+          id: auth.user.id,
+          role: 'teacher',
+          full_name: uniqueName,
+          phone: phone || null,
+          subject,
+          level,
+          plain_password: password,
+          login_number: loginNumber,
+          share_code: shareCode,
+          email: fakeEmail
+        });
+        if (profErr) throw profErr;
+
+        for (let i = 1; i <= 5; i++) {
+          await supabase.from('teacher_groups').insert({
+            teacher_id: auth.user.id,
+            name: `فوج ${i}`
+          });
+        }
+
+        if (FINGERPRINT_ENABLED) {
+          await supabase.from('trials').insert({
+            fingerprint: fp,
+            user_id: auth.user.id,
+            email: fakeEmail,
+            phone: phone || null,
+            started_at: new Date().toISOString(),
+            ends_at: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString()
+          });
+        }
+
+        document.getElementById('genNumber').textContent = loginNumber;
+        document.getElementById('genPassword').textContent = password;
+        document.getElementById('genName').textContent = uniqueName;
+        document.getElementById('genShareCode').textContent = shareCode;
+        showScreen('credentialsScreen');
+        toast('✅ تم إنشاء الحساب بنجاح', 'success');
+
+        if (uniqueName !== name) {
+          setTimeout(() => toast(`ℹ️ سجلناك باسم "${uniqueName}" حيت "${name}" مستعمل`, 'info'), 1200);
+        }
+
+      } catch (err) {
+        toast(err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'إنشاء الحساب';
+      }
     };
 
-    $('loginForm').onsubmit = async (e) => {
-      e.preventDefault();
-      const { data, error } = await supabase.auth.signInWithPassword({ email: $('loginEmail').value, password: $('loginPassword').value });
-      if (error) return toast(error.message, 'error');
-      loadDashboard(data.user.id);
+    window.copyAll = () => {
+      const txt = `رقم الدخول: ${document.getElementById('genNumber').textContent}\nكلمة المرور: ${document.getElementById('genPassword').textContent}\nالاسم: ${document.getElementById('genName').textContent}\nكود المشاركة: ${document.getElementById('genShareCode').textContent}`;
+      navigator.clipboard.writeText(txt);
+      toast('✅ تم النسخ', 'success');
     };
 
-    $('logoutBtn').onclick = async () => { await supabase.auth.signOut(); location.reload(); };
+    window.doLogin = async () => {
+      const number = document.getElementById('loginNumber').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      if (!number || !password) return toast('دخل المعلومات', 'error');
 
-    // ==========================================
-    // 🚀 MAIN DASHBOARD ROUTER
-    // ==========================================
+      const btn = document.getElementById('loginBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loader-spin"></span>...';
+
+      try {
+        const fakeEmail = `${number}${FAKE_DOMAIN}`;
+        const { data, error } = await supabase.auth.signInWithPassword({ email: fakeEmail, password });
+        if (error) throw new Error('رقم الدخول أو كلمة المرور غالطة');
+        await loadDashboard(data.user.id);
+      } catch (err) {
+        toast(err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'دخول';
+      }
+    };
+
+    window.logout = async () => {
+      await supabase.auth.signOut();
+      showScreen('welcomeScreen');
+      toast('✅ تم تسجيل الخروج', 'success');
+    };
+
+    window.sendWhatsApp = () => {
+      const input = document.getElementById('forgotInput').value.trim();
+      if (!input) return toast('دخل الاسم أو الرقم', 'error');
+      const msg = encodeURIComponent(`السلام، نسيت كلمة المرور ديالي فـ تطبيق Lycée Maroc AI.\nالاسم / الرقم: ${input}`);
+      window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`, '_blank');
+    };
+
+    window.copyShareCode = () => {
+      navigator.clipboard.writeText(document.getElementById('shareCode').textContent);
+      toast('✅ تم النسخ', 'success');
+    };
+
+    window.shareWhatsApp = () => {
+      const code = document.getElementById('shareCode').textContent;
+      const msg = encodeURIComponent(`السلام، هاد كود الأستاذ ديالي فـ Lycée Maroc AI: ${code}\nحمّل التطبيق: https://lycee-maroc-ai.vercel.app`);
+      window.open(`https://wa.me/?text=${msg}`, '_blank');
+    };
+
     async function loadDashboard(userId) {
-      const { data: profile } = await supabase.from('profiles').select('*').eq('id', userId).single();
-      currentUser = profile; 
-      hide($('welcomeScreen')); hide($('authScreen')); show($('dashboardScreen'));
-      $('dashGreeting').textContent = `مرحباً ${profile.full_name}`;
-      $('dashRole').textContent = profile.role;
+      const { data: profile, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
+      if (error || !profile) return toast('الحساب غير موجود', 'error');
 
-      if (profile.role === 'teacher') renderTeacherDash(profile);
-      else if (profile.role === 'student') renderStudentDash(profile);
-      else if (profile.role === 'parent') renderParentDash(profile);
-      else if (profile.role === 'guard') renderGuardDash(profile);
-      else if (profile.role === 'director') renderDirectorDash(profile);
-      else $('dashContent').innerHTML = '<div class="card"><h3>🚧 قريباً</h3></div>';
+      const now = new Date();
+      const trialEnd = profile.trial_ends_at ? new Date(profile.trial_ends_at) : null;
+      const subEnd = profile.subscription_ends_at ? new Date(profile.subscription_ends_at) : null;
+      const isBlocked = profile.is_blocked === true;
+
+      const isActive = !isBlocked && ((subEnd && subEnd > now) || (trialEnd && trialEnd > now));
+
+      if (!isActive) {
+        showScreen('inactiveScreen');
+        return;
+      }
+
+      CURRENT_PROFILE = profile;
+      document.getElementById('dashName').textContent = 'مرحباً ' + profile.full_name;
+      document.getElementById('shareCode').textContent = profile.share_code || '------';
+      showScreen('dashboardScreen');
+      loadTab('groups');
     }
 
-    // ==========================================
-    // 👨‍🏫 TEACHER DASHBOARD (Using RPC Functions)
-    // ==========================================
-    async function renderTeacherDash(profile) {
-      const dash = $('dashContent');
-      dash.innerHTML = `
-        <div class="ai-card"><h3>🤖 AI المساعد</h3><p>جاهز لتصحيح الأوراق وتوليد الأسئلة.</p></div>
-        <div class="tabs-scroll">
-          <button class="tab-btn active" data-tab="students">التلاميذ</button>
-          <button class="tab-btn" data-tab="requests">الطلبات</button>
-          <button class="tab-btn" data-tab="lessons">الدروس</button>
-        </div>
-        <div id="teacherTabContent"></div>`;
+    window.loadTab = async (tab, btn) => {
+      if (btn) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+      
+      const c = document.getElementById('tabContent');
+      c.innerHTML = '<div class="empty-state">جاري التحميل...</div>';
 
-      const loadTab = async (tab) => {
-        const c = $('teacherTabContent');
-        c.innerHTML = '<div style="text-align:center; padding:20px;">جاري التحميل...</div>';
+      if (tab === 'groups') {
+        const { data: groups } = await supabase
+          .from('teacher_groups')
+          .select('*')
+          .eq('teacher_id', CURRENT_PROFILE.id)
+          .order('created_at');
         
-        if (tab === 'students') {
-          // استعمال الدالة get_teacher_students
-          const { data: studs, error } = await supabase.rpc('get_teacher_students', { p_teacher_id: profile.id });
-          if(error) { c.innerHTML = `<div class="card" style="color:red;">خطأ: ${error.message}</div>`; return; }
-          
-          c.innerHTML = studs?.length ? studs.map(s => `
-            <div class="student-row" onclick="openStudentModal('${s.student_id}')">
-              <div><strong>${s.full_name}</strong><br><small>${s.email}</small></div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        if (!groups || groups.length === 0) {
+          c.innerHTML = '<div class="empty-state"><div class="empty-icon">📁</div>ما كاينش أفواج</div>';
+          return;
+        }
+
+        const { data: students } = await supabase
+          .from('teacher_students')
+          .select('group_name')
+          .eq('teacher_id', CURRENT_PROFILE.id)
+          .eq('is_active', true);
+
+        const counts = {};
+        (students || []).forEach(s => {
+          counts[s.group_name] = (counts[s.group_name] || 0) + 1;
+        });
+
+        c.innerHTML = `<div class="group-grid">
+          ${groups.map(g => `
+            <div class="group-card">
+              <div class="icon">📁</div>
+              <div class="name">${g.name}</div>
+              <div class="count">${counts[g.name] || 0} تلميذ</div>
             </div>
-          `).join('') : '<div class="card">ما كاينش تلاميذ.</div>';
-        }
-        else if (tab === 'requests') {
-          // استعمال الدالة get_join_requests_for_teacher
-          const { data: reqs, error } = await supabase.rpc('get_join_requests_for_teacher', { p_teacher_id: profile.id });
-          if(error) { c.innerHTML = `<div class="card" style="color:red;">خطأ: ${error.message}</div>`; return; }
-          
-          c.innerHTML = reqs?.length ? reqs.map(r => `
-            <div class="card" style="margin-bottom:8px;">
-              <strong>${r.student_name}</strong>
-              <div style="display:flex; gap:10px; margin-top:10px;">
-                <button class="btn-primary" style="padding:8px;" onclick="handleReq('${r.request_id}', 'accept')">قبول</button>
-                <button class="btn-outline" style="padding:8px;" onclick="handleReq('${r.request_id}', 'reject')">رفض</button>
-              </div>
-            </div>
-          `).join('') : '<div class="card">ما كاينش طلبات.</div>';
-        }
-        else if (tab === 'lessons') {
-          // بما أن دالة جلب الدروس مكايناش، كنستعملو الجدول مباشرة (إلا كان كاين)
-          const { data: lessons, error } = await supabase.from('lessons').select('*').eq('teacher_id', profile.id).order('created_at', { ascending: false });
-          c.innerHTML = `
-            <div class="card">
-              <h3>➕ رفع درس جديد</h3>
-              <input type="text" id="lessonTitle" placeholder="عنوان الدرس" style="width:100%; padding:12px; margin:10px 0; border:1px solid #ccc; border-radius:8px;">
-              <textarea id="lessonContent" placeholder="محتوى الدرس..." style="width:100%; padding:12px; height:80px; border:1px solid #ccc; border-radius:8px;"></textarea>
-              <button class="btn-primary" style="margin-top:10px;" onclick="addLesson()">نشر الدرس</button>
-            </div>
-            ${lessons?.map(l => `
-              <div class="card" style="margin-top:10px;">
-                <strong>${l.title}</strong>
-                <p style="color:#666; font-size:14px; margin-top:5px;">${l.content}</p>
-              </div>
-            `).join('') || ''}
-          `;
-        }
-      };
+          `).join('')}
+        </div>`;
+      }
+      else if (tab === 'students') {
+        c.innerHTML = '<div class="empty-state"><div class="empty-icon">👥</div>ما كاينش تلاميذ دابا<br><small>غادي يبانيو هنا ملي يقبلو الطلبات</small></div>';
+      }
+      else if (tab === 'requests') {
+        c.innerHTML = '<div class="empty-state"><div class="empty-icon">📥</div>ما كاينش طلبات دابا<br><small>التلاميذ كيصيفطو طلبات من التطبيق ديالهم</small></div>';
+      }
+      else if (tab === 'lessons') {
+        c.innerHTML = '<div class="empty-state"><div class="empty-icon">📚</div>مازال AI ما تربطش<br><small>قريباً: توليد الدروس والامتحانات</small></div>';
+      }
+      else if (tab === 'messages') {
+        c.innerHTML = '<div class="empty-state"><div class="empty-icon">💬</div>ما كاينش رسائل دابا</div>';
+      }
+      else if (tab === 'settings') {
+        c.innerHTML = '<div class="empty-state"><div class="empty-icon">⚙️</div>الإعدادات قريباً</div>';
+      }
+    };
 
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.onclick = () => {
-          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          loadTab(btn.dataset.tab);
-        };
-      });
-      loadTab('students');
-
-      window.addLesson = async () => {
-        const title = $('lessonTitle').value, content = $('lessonContent').value;
-        if(!title) return toast('دخل العنوان', 'error');
-        await supabase.from('lessons').insert({ teacher_id: profile.id, title, content });
-        toast('✅ تم نشر الدرس'); loadTab('lessons');
-      };
-
-      window.handleReq = async (id, action) => {
-        // استعمال الدوال accept_join_request و reject_join_request
-        const fn = action === 'accept' ? 'accept_join_request' : 'reject_join_request';
-        const { error } = await supabase.rpc(fn, { p_request_id: id });
-        if(error) return toast(error.message, 'error');
-        toast('تم'); loadTab('requests');
-      };
-
-      window.openStudentModal = async (studentId) => {
-        // بلا ما نغلط، هاد الدالة كتجيب معلومات التلميذ
-        const { data: s } = await supabase.from('profiles').select('*').eq('id', studentId).single();
-        
-        $('modalContent').innerHTML = `
-          <h2 style="margin-bottom:15px;">👤 ${s.full_name}</h2>
-          <p style="font-size:14px; color:#666; margin-bottom:5px;">📧 ${s.email}</p>
-          <p style="font-size:14px; color:#666; margin-bottom:5px;">📱 ${s.phone}</p>
-          <p style="font-size:14px; color:#666; margin-bottom:15px;">🎓 المستوى: ${s.level || 'غير محدد'}</p>
-          
-          <div class="modal-form-group">
-            <label>كود الأب (للتواصل):</label>
-            <input type="text" value="${s.parent_code || 'PAR-XXXX'}" readonly>
-          </div>
-        `;
-        $('modalOverlay').classList.add('active');
-      };
+    async function checkSession() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session && session.user) {
+        await loadDashboard(session.user.id);
+      } else {
+        showScreen('welcomeScreen');
+      }
     }
 
-    // ==========================================
-    // 🎓 STUDENT DASHBOARD (Using RPC Functions)
-    // ==========================================
-    async function renderStudentDash(profile) {
-      const dash = $('dashContent');
-      dash.innerHTML = `<div class="ai-card"><h3>🤖 AI المساعد</h3><p>مرحباً، أنا هنا لمساعدتك.</p></div>
-        <div id="studentContent"><div style="text-align:center; padding:20px;">جاري التحميل...</div></div>`;
+    setTimeout(() => {
+      document.getElementById('splashScreen').classList.add('hidden');
+      checkSession();
+    }, 1500);
 
-      const c = $('studentContent');
-      
-      // كنجيبو غير الدروس اللي تابعة للأستاذ (إلا كان كاين جدول lessons)
-      const { data: lessons } = await supabase.from('lessons').select('*').order('created_at', { ascending: false }).limit(5);
-
-      c.innerHTML = `
-        <div class="card">
-          <h3>🎟️ انضم لأستاذ</h3>
-          <p style="font-size:14px; color:#666; margin-bottom:10px;">دخل كود الأستاذ باش تشوف الدروس ديالو.</p>
-          <input type="text" id="tCode" placeholder="T19X4K" style="text-align:center; font-size:20px; letter-spacing:5px; font-weight:800; width:100%; padding:15px; border:2px solid #ccc; border-radius:10px;">
-          <button class="btn-primary" style="margin-top:10px;" onclick="joinTeacher()">🔍 بحث</button>
-        </div>
-        <h3 style="margin-top:15px;">📚 آخر الدروس</h3>
-        ${lessons?.length ? lessons.map(l => `
-          <div class="card" style="margin-top:8px;">
-            <strong>${l.title}</strong>
-            <p style="color:#666; font-size:14px; margin-top:5px;">${l.content}</p>
-          </div>
-        `).join('') : '<div class="card">ما كاينش دروس حالياً.</div>'}
-      `;
-
-      window.joinTeacher = async () => {
-        const code = $('tCode').value.trim().toUpperCase();
-        if(!code) return;
-        // استعمال الدالة find_teacher_by_code
-        const { data: teacher, error } = await supabase.rpc('find_teacher_by_code', { p_code: code });
-        if(teacher && teacher.length > 0) {
-          await supabase.from('join_requests').insert({ from_user: profile.id, to_teacher: teacher[0].out_teacher_id, status: 'pending' });
-          toast('✅ تم إرسال الطلب للأستاذ', 'success');
-        } else {
-          toast('❌ الكود غالط', 'error');
-        }
-      };
-    }
-
-    // ==========================================
-    // 👨‍👦 PARENT DASHBOARD (Using RPC Functions)
-    // ==========================================
-    async function renderParentDash(profile) {
-      const dash = $('dashContent');
-      dash.innerHTML = `<div id="parentContent"><div style="text-align:center; padding:20px;">جاري التحميل...</div></div>`;
-      
-      const c = $('parentContent');
-      // استعمال الدالة get_parent_children
-      const { data: children, error } = await supabase.rpc('get_parent_children', { p_parent_id: profile.id });
-
-      if(error) { c.innerHTML = `<div class="card" style="color:red;">خطأ: ${error.message}</div>`; return; }
-
-      c.innerHTML = `
-        <div class="card">
-          <h3>👨‍👦 متابعة الأبناء</h3>
-          <p style="font-size:14px; color:#666; margin-bottom:10px;">دخل كود ابنك باش تشوف نتائجه وملاحظات الأستاذ.</p>
-          <input type="text" id="pCode" placeholder="PAR-XXXX" style="text-align:center; font-size:20px; letter-spacing:5px; font-weight:800; width:100%; padding:15px; border:2px solid #ccc; border-radius:10px;">
-          <button class="btn-primary" style="margin-top:10px;" onclick="findChild()">🔍 بحث</button>
-        </div>
-        ${children?.length ? children.map(ch => `
-          <div class="card" style="margin-top:10px;">
-            <strong>👤 ${ch.full_name}</strong><br>
-            <small>🎓 المستوى: ${ch.level}</small>
-          </div>
-        `).join('') : '<div class="card">ما كاينش أبناء مرتبطين بحسابك دابا.</div>'}
-      `;
-
-      window.findChild = async () => {
-        const code = $('pCode').value.trim().toUpperCase();
-        if(!code) return;
-        // استعمال الدالة find_student_by_parent_code
-        const { data: student, error } = await supabase.rpc('find_student_by_parent_code', { p_parent_code: code });
-        if(student && student.length > 0) {
-          toast('✅ لقينا التلميذ', 'success');
-        } else {
-          toast('❌ الكود غالط', 'error');
-        }
-      };
-    }
-
-    // ==========================================
-    // 🛡️ GUARD DASHBOARD
-    // ==========================================
-    async function renderGuardDash(profile) {
-      const dash = $('dashContent');
-      dash.innerHTML = `
-        <div class="card">
-          <h3>🛡️ تسجيل الغياب</h3>
-          <p style="font-size:14px; color:#666;">استعمل الكود ديالك باش تسجل الغياب.</p>
-        </div>
-      `;
-    }
-
-    // ==========================================
-    // 🏛️ DIRECTOR DASHBOARD
-    // ==========================================
-    async function renderDirectorDash(profile) {
-      const dash = $('dashContent');
-      dash.innerHTML = `<div id="dirContent"><div style="text-align:center; padding:20px;">جاري التحميل...</div></div>`;
-      const c = $('dirContent');
-      
-      // استعمال الدالة get_director_summary
-      const { data: summary, error } = await supabase.rpc('get_director_summary', { p_director_id: profile.id });
-      
-      c.innerHTML = `
-        <div class="card">
-          <h3>🏛️ ملخص المدير</h3>
-          ${error ? `<p style="color:red;">${error.message}</p>` : `<pre>${JSON.stringify(summary, null, 2)}</pre>`}
-        </div>
-      `;
-    }
-
-    supabase.auth.getSession().then(({ data: { session } }) => { if(session) loadDashboard(session.user.id); });
-    $('modalOverlay').onclick = (e) => { if(e.target === $('modalOverlay')) $('modalOverlay').classList.remove('active'); };
   </script>
 </body>
 </html>
